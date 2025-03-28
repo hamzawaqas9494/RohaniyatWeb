@@ -1,46 +1,60 @@
 import nodemailer from "nodemailer";
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res
-      .status(405)
-      .json({ success: false, message: "Method Not Allowed" });
-  }
-
+export async function POST(req) {
   try {
-    const data = req.body;
+    const body = await req.json();
+    const {
+      name,
+      fatherName,
+      motherName,
+      country,
+      cityName,
+      age,
+      dateOfBirth,
+      gender,
+      status,
+      whatsappNumber,
+      email,
+      natureOfBait,
+    } = body;
 
-    console.log(data, "data comming from react native app ");
-
-    // 📨 Nodemailer Transporter Setup
+    // Nodemailer setup
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL, // Your Gmail Email
-        pass: process.env.PASSWORD, // Your Gmail App Password
+        user: process.env.EMAIL, // Your Gmail
+        pass: process.env.PASSWORD, // App Password
       },
     });
 
-    // 📧 Email Content
     const mailOptions = {
       from: process.env.EMAIL,
-      to: process.env.TO_EMAIL, // Jis Email pe send karna hai
+      to: process.env.TO_EMAIL, // Receiver Email
       subject: "New Form Submission",
-      text: Object.entries(data)
-        .map(([key, value]) => `${key}: ${value}`)
-        .join("\n"),
+      text: `
+      Name: ${name}
+      Father Name: ${fatherName}
+      Mother Name: ${motherName}
+      Country: ${country}
+      City: ${cityName}
+      Age: ${age}
+      Date of Birth: ${dateOfBirth}
+      Gender: ${gender}
+      Status: ${status}
+      WhatsApp: ${whatsappNumber}
+      Email: ${email}
+      Nature of Bait: ${natureOfBait}
+      `,
     };
 
-    // 🔥 Send Email
     await transporter.sendMail(mailOptions);
 
-    return res
-      .status(200)
-      .json({ success: true, message: "Email sent successfully!" });
+    return Response.json(
+      { message: "Email sent successfully" },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Email sending error:", error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Failed to send email." });
+    console.error("Error sending email:", error);
+    return Response.json({ error: "Failed to send email" }, { status: 500 });
   }
 }
