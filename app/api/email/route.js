@@ -23,7 +23,7 @@ export async function POST(req) {
     });
 
     const mailOptions = {
-      from: `"New Form Submission" <${"hamzawaqas194@gmail.com"}>`,
+      from: `"New Form Submission" <${"hamzawaqas@gmail.com"}>`,
       to: "hamzawaqas194@gmail.com",
       subject: "New Form Submission Received",
       text: `
