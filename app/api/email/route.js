@@ -6,12 +6,13 @@ export async function POST(req) {
     // Correct way to get JSON body in Next.js app directory
     const body = await req.json();
 
-    if (!body.email) {
-      return NextResponse.json(
-        { error: "Email is required!" },
-        { status: 400 }
-      );
-    }
+    console.log(body, "body");
+    // if (!body.email) {
+    //   return NextResponse.json(
+    //     { error: "Email is required!" },
+    //     { status: 400 }
+    //   );
+    // }
 
     // Ensure environment variables are correctly set
     if (!process.env.EMAIL || !process.env.PASSWORD) {
@@ -36,15 +37,6 @@ export async function POST(req) {
       text: `
       Name: ${body.name}
       Father Name: ${body.fatherName}
-      Mother Name: ${body.motherName}
-      Country: ${body.country}
-      City: ${body.cityName}
-      Age: ${body.age}
-      Date of Birth: ${body.dateOfBirth}
-      Gender: ${body.gender}
-      Status: ${body.status}
-      WhatsApp: ${body.whatsappNumber}
-      Nature of Bait: ${body.natureOfBait}
       `,
     };
 
@@ -64,5 +56,8 @@ export async function POST(req) {
 
 // Handle GET requests properly
 export async function GET() {
-  return NextResponse.json({ error: "Method Not Allowed" }, { status: 405 });
+  return NextResponse.json(
+    { error: "Method Not Allowed hamza" },
+    { status: 405 }
+  );
 }
