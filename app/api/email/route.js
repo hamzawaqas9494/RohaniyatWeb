@@ -22,7 +22,6 @@ export async function POST(req) {
       },
     });
 
-    // 📩 Mail Content (User ke Data ke Saath)
     const mailOptions = {
       from: `"New Form Submission" <${"hamzawaqas194@gmail.com"}>`,
       to: "hamzawaqas194@gmail.com",
