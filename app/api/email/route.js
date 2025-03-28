@@ -3,46 +3,40 @@ import nodemailer from "nodemailer";
 
 export async function POST(req) {
   try {
-    // Correct way to get JSON body in Next.js app directory
     const body = await req.json();
 
-    console.log(body, "body");
-    // if (!body.email) {
-    //   return NextResponse.json(
-    //     { error: "Email is required!" },
-    //     { status: 400 }
-    //   );
-    // }
-
-    // Ensure environment variables are correctly set
-    if (!process.env.EMAIL || !process.env.PASSWORD) {
+    if (!body.name) {
       return NextResponse.json(
-        { error: "Email credentials missing!" },
-        { status: 500 }
+        { error: "Name and Country are required!" },
+        { status: 400 }
       );
     }
 
+    // 📨 Gmail SMTP Setup
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL,
-        pass: process.env.PASSWORD,
+        user: process.env.EMAIL, // ✅ Admin Gmail (Sender)
+        pass: process.env.PASSWORD, // ✅ Gmail App Password
       },
     });
 
+    // 📩 Mail Content (User ke Data ke Saath)
     const mailOptions = {
-      from: process.env.EMAIL,
-      to: body.email, // Send to the email provided in the form
-      subject: "New Form Submission",
+      from: `"New Form Submission" <${process.env.EMAIL}>`, // ✅ Sender (Your Gmail)
+      to: process.env.TO_EMAIL, // ✅ Admin Email (Receiver)
+      subject: "New Form Submission Received",
       text: `
-      Name: ${body.name}
-      Father Name: ${body.fatherName}
+        Name: ${body.name}
+        Father Name: ${body.fatherName || "N/A"}
       `,
     };
 
+    // 📬 Send Email
     await transporter.sendMail(mailOptions);
+
     return NextResponse.json(
-      { success: true, message: "Email sent successfully" },
+      { message: "Email sent successfully" },
       { status: 200 }
     );
   } catch (error) {
@@ -54,10 +48,6 @@ export async function POST(req) {
   }
 }
 
-// Handle GET requests properly
 export async function GET() {
-  return NextResponse.json(
-    { error: "Method Not Allowed hamza" },
-    { status: 405 }
-  );
+  return NextResponse.json({ error: "Method Not Allowed" }, { status: 405 });
 }
