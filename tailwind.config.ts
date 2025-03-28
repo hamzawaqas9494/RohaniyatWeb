@@ -1,13 +1,12 @@
-import type { Config } from "tailwindcss";
 const defaultTheme = require("tailwindcss/defaultTheme");
 
-const config: Config = {
+module.exports = {
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./ui/**/*.{js,ts,jsx,tsx,mdx}",
-    "./icons/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,jsx,tsx,mdx}",
+    "./components/**/*.{js,jsx,tsx,mdx}",
+    "./app/**/*.{js,jsx,tsx,mdx}",
+    "./ui/**/*.{js,jsx,tsx,mdx}",
+    "./icons/**/*.{js,jsx,tsx,mdx}",
   ],
   mode: "jit",
   theme: {
@@ -16,9 +15,6 @@ const config: Config = {
       padding: {
         DEFAULT: "0.5rem",
         sm: "3rem",
-       
-      
-       
       },
     },
     extend: {
@@ -43,12 +39,10 @@ const config: Config = {
         },
         gray: {
           550: "#EFF0F3",
-          750:"#545151",
-          450:"#8D8888",
-          
+          750: "#545151",
+          450: "#8D8888",
         },
       },
-
       maxWidth: {
         "3.5xl": "50rem",
       },
@@ -56,4 +50,3 @@ const config: Config = {
   },
   plugins: [],
 };
-export default config;
