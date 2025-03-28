@@ -1,60 +1,50 @@
+import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const {
-      name,
-      fatherName,
-      motherName,
-      country,
-      cityName,
-      age,
-      dateOfBirth,
-      gender,
-      status,
-      whatsappNumber,
-      email,
-      natureOfBait,
-    } = body;
 
-    // Nodemailer setup
+    if (!body.email) {
+      return NextResponse.json(
+        { error: "Email is required!" },
+        { status: 400 }
+      );
+    }
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL, // Your Gmail
-        pass: process.env.PASSWORD, // App Password
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
       },
     });
 
     const mailOptions = {
       from: process.env.EMAIL,
-      to: process.env.TO_EMAIL, // Receiver Email
+      to: process.env.TO_EMAIL,
       subject: "New Form Submission",
       text: `
-      Name: ${name}
-      Father Name: ${fatherName}
-      Mother Name: ${motherName}
-      Country: ${country}
-      City: ${cityName}
-      Age: ${age}
-      Date of Birth: ${dateOfBirth}
-      Gender: ${gender}
-      Status: ${status}
-      WhatsApp: ${whatsappNumber}
-      Email: ${email}
-      Nature of Bait: ${natureOfBait}
+      Name: ${body.name}
+      Email: ${body.email}
+      Country: ${body.country}
       `,
     };
 
     await transporter.sendMail(mailOptions);
-
-    return Response.json(
+    return NextResponse.json(
       { message: "Email sent successfully" },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error sending email:", error);
-    return Response.json({ error: "Failed to send email" }, { status: 500 });
+    console.error("Server Error:", error);
+    return NextResponse.json(
+      { error: "Failed to send email", details: error.message },
+      { status: 500 }
+    );
   }
+}
+
+export async function GET() {
+  return NextResponse.json({ error: "Method Not Allowed" }, { status: 405 });
 }
