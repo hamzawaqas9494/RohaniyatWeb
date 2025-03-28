@@ -6,7 +6,6 @@ export async function POST(req) {
     const body = await req.json();
     console.log(body, "Received data from React Native app");
 
-    // ✅ Validation
     if (!body.name || !body.email) {
       return NextResponse.json(
         { error: "Name and Email are required!" },
@@ -14,19 +13,17 @@ export async function POST(req) {
       );
     }
 
-    // 📨 Gmail SMTP Setup
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "hamzawaqas194@gmail.com", // ✅ Secure from .env
-        pass: "hctb ahjq viqf wzun", // ✅ Secure from .env
+        user: "hamzawaqas194@gmail.com",
+        pass: "hctb ahjq viqf wzun",
       },
     });
 
-    // ✅ Email Template for Admin (Formatted)
     const adminMailOptions = {
-      from: `"New Request from ${body.name}" <${body.email}>`, // 📩 User ki email as sender
-      to: process.env.ADMIN_EMAIL, // ✅ Admin ka email
+      from: `"New Request from ${body.name}" <${body.email}>`,
+      to: "hamzawaqas194@gmail.com",
       subject: "New Form Submission Received",
       html: `
         <h2>New Form Submission</h2>
@@ -49,7 +46,7 @@ export async function POST(req) {
 
     // ✅ Email to User (Confirmation)
     const userMailOptions = {
-      from: `"Support Team" <${process.env.SMTP_USER}>`, // 📩 Admin se reply
+      from: `"Support Team" <$"hamzawaqas194@gmail.com"}>`,
       to: body.email,
       subject: "Your Form Submission Received",
       html: `
