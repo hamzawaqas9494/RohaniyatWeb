@@ -10,6 +10,8 @@ export default async function handler(req, res) {
   try {
     const data = req.body;
 
+    console.log(data, "data comming from react native app ");
+
     // 📨 Nodemailer Transporter Setup
     const transporter = nodemailer.createTransport({
       service: "gmail",
