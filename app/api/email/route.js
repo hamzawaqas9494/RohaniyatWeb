@@ -17,15 +17,15 @@ export async function POST(req) {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL, // ✅ Admin Gmail (Sender)
-        pass: process.env.PASSWORD, // ✅ Gmail App Password
+        user: "hamzawaqas194@gmail.com",
+        pass: "hctb ahjq viqf wzun",
       },
     });
 
     // 📩 Mail Content (User ke Data ke Saath)
     const mailOptions = {
-      from: `"New Form Submission" <${process.env.EMAIL}>`, // ✅ Sender (Your Gmail)
-      to: process.env.TO_EMAIL, // ✅ Admin Email (Receiver)
+      from: `"New Form Submission" <${"hamzawaqas194@gmail.com"}>`,
+      to: "hamzawaqas194@gmail.com",
       subject: "New Form Submission Received",
       text: `
         Name: ${body.name}
