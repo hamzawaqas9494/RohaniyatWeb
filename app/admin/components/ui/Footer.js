@@ -6,9 +6,9 @@ const Footer = () => {
 
   return (
     <footer className="min-h-[10vh] flex items-center justify-center w-full fixed bottom-0 bg-[#6C472D]">
-      <p className="text-white text-lg">
+      <p className="text-white">
         © {curYear}{" "}
-        <Link href="/" className="hover:underline font-bold">
+        <Link href="/" className="hover:underline font-semibold">
           Rohaniyat
         </Link>
         . All rights reserved.
