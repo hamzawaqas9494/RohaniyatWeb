@@ -5,11 +5,11 @@ const Footer = () => {
   const curYear = new Date().getFullYear();
 
   return (
-    <footer className="mx-4 my-4 rounded-lg bg-white p-4 text-center shadow md:items-center md:p-6 xl:p-8">
-      <p className="text-sm font-normal text-gray-500">
+    <footer className="min-h-[10vh] flex items-center justify-center w-full fixed bottom-0 bg-[#6C472D]">
+      <p className="text-white text-lg">
         © {curYear}{" "}
-        <Link href="/" className="hover:underline">
-          Current.gold
+        <Link href="/" className="hover:underline font-bold">
+          Rohaniyat
         </Link>
         . All rights reserved.
       </p>

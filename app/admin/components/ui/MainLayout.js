@@ -8,20 +8,22 @@ const MainLayout = ({ children }) => {
   const [showSideBar, setShowSideBar] = useState(true);
 
   return (
-    <main>
+    <>
       <Navbar handleSideBarStatus={() => setShowSideBar(!showSideBar)} />
-      <div className="flex bg-gray-50 pt-16">
-        <Sidebar showSideBar={showSideBar} />
-        <div
-          className={`relative h-full w-full bg-gray-50 transition-all duration-300 ${
-            showSideBar ? "lg:ml-64" : "lg:ml-0"
-          }`}
-        >
-          {children}
-          <Footer />
+      <main>
+        <div className="flex mt-[10vh] mb-[10vh] md:min-h-[80vh]">
+          <Sidebar showSideBar={showSideBar} />
+          <div
+            className={`relative h-full w-full transition-all duration-300 bg-[#EFEADF] md:min-h-[80vh] p-2 md:px-4 md:py-8 ${
+              showSideBar ? "lg:ml-64" : "lg:ml-0"
+            }`}
+          >
+            {children}
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+      <Footer />
+    </>
   );
 };
 

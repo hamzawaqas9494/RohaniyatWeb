@@ -50,3 +50,15 @@ body {
 .nav-item button.fromLeft:after {
   transform-origin: 0% 50%;
 }
+
+.tiptap {
+  height: 40vh;
+  padding: 5px;
+  outline: none;
+  direction: auto;
+}
+.tiptap p.is-empty::before {
+  content: attr(data-placeholder);
+  color: #6c472d;
+  font-weight: bold;
+}
