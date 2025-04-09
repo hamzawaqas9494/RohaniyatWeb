@@ -1664,18 +1664,8 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
 "use client";
-
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation"; // Ensure this is used in the client-side context
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Bold from "@tiptap/extension-bold";
@@ -1770,14 +1760,16 @@ export default function BlogForm() {
   useEffect(() => {
     const fetchData = async () => {
       if (!searchParams) return;
-      
+
       const id = searchParams.get("id");
       const queryTable = searchParams.get("tableName") || "";
-      
+
       if (!id || !queryTable || !editor) return;
 
       try {
-        const res = await fetch(`/api/card-data/update-data?id=${id}&tableName=${queryTable}`);
+        const res = await fetch(
+          `/api/card-data/update-data?id=${id}&tableName=${queryTable}`
+        );
         if (!res.ok) throw new Error("Failed to fetch");
 
         const data = await res.json();
@@ -1825,7 +1817,9 @@ export default function BlogForm() {
       });
 
       if (response.ok) {
-        showMessage(`✅ Blog ${searchParams ? "updated" : "submitted"} successfully!`);
+        showMessage(
+          `✅ Blog ${searchParams ? "updated" : "submitted"} successfully!`
+        );
         clearForm();
       } else {
         showMessage("❌ Blog submission failed!");
@@ -1853,7 +1847,10 @@ export default function BlogForm() {
   return (
     <MainLayout>
       <Suspense fallback={<div>Loading...</div>}>
-        <form onSubmit={handleSubmit} className="w-full grid grid-cols-12 gap-4">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full grid grid-cols-12 gap-4"
+        >
           {/* Select Table */}
           <div className="col-span-12 md:col-span-3">
             <select
