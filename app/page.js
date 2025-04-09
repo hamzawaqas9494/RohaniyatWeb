@@ -1151,6 +1151,7 @@ import MainLayout from "./admin/components/ui/MainLayout";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 // Updated list of tables
 const allowedTables = ["wazaif", "jado_tona_alaj", "mujrab_nakosh", "qutab"];
@@ -1279,9 +1280,12 @@ export default function Dashboard() {
                     </td>
                     <td className="px-4 py-3 flex justify-center">
                       {item.image ? (
-                        <img
+                        <Image
+                        height={8}
+                        width={8}
                           src={item.image}
                           className="w-16 h-16 object-cover"
+                          alt=""
                         />
                       ) : (
                         "No Image"

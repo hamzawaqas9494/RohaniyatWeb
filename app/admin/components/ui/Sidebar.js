@@ -11,7 +11,9 @@ const sideNavigation = [
     name: "Dashboard",
     href: "/",
     icon: (
-      <img
+      <Image
+      height={8}
+      width={8}
         src="/assets/images/bookicon.png"
         className={iconClass}
         alt="Dashboard Icon"
@@ -22,7 +24,9 @@ const sideNavigation = [
     name: "Enter_Blog",
     href: "/enter_blog",
     icon: (
-      <img
+      <Image
+       height={8}
+       width={8}
         src="/assets/images/bookicon.png"
         className={iconClass}
         alt="Dashboard Icon"
