@@ -1,6 +1,7 @@
 // app/api/card-data/delete-data/route.js
 
 import pool from "../../../../lib/db";
+export const dynamic = "force-dynamic";
 
 export async function DELETE(req) {
   const { searchParams } = new URL(req.url); // Correct way to parse query params
