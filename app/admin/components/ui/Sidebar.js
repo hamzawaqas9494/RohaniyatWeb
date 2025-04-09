@@ -19,41 +19,8 @@ const sideNavigation = [
     ),
   },
   {
-    name: "Wazaif",
-    href: "/wazaif",
-    icon: (
-      <img
-        src="/assets/images/bookicon.png"
-        className={iconClass}
-        alt="Dashboard Icon"
-      />
-    ),
-  },
-  {
-    name: "Jadu jinnat masail",
-    href: "/jinnat-masail-ilaj",
-    icon: (
-      <img
-        src="/assets/images/bookicon.png"
-        className={iconClass}
-        alt="Dashboard Icon"
-      />
-    ),
-  },
-  {
-    name: "Mujrab-Naqoosh",
-    href: "/mujrab-naqoosh",
-    icon: (
-      <img
-        src="/assets/images/bookicon.png"
-        className={iconClass}
-        alt="Dashboard Icon"
-      />
-    ),
-  },
-  {
-    name: "Qutab",
-    href: "/qutab",
+    name: "Enter_Blog",
+    href: "/enter_blog",
     icon: (
       <img
         src="/assets/images/bookicon.png"
