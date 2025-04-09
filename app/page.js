@@ -1281,8 +1281,8 @@ export default function Dashboard() {
                     <td className="px-4 py-3 flex justify-center">
                       {item.image ? (
                         <Image
-                        height={8}
-                        width={8}
+                          height={8}
+                          width={8}
                           src={item.image}
                           className="w-16 h-16 object-cover"
                           alt=""
@@ -1294,7 +1294,7 @@ export default function Dashboard() {
                     <td className="px-4 py-3 text-center">
                       <Link
                         href={{
-                          pathname: "/",
+                          pathname: "./enter_blog",
                           query: { id: item.id, tableName: activeTable },
                         }}
                       >

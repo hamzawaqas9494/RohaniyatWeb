@@ -149,7 +149,7 @@
 import { writeFile } from "fs/promises";
 import { join } from "path";
 import pool from "../../../../lib/db"; // Assumes you are using a pg Pool or client
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 export async function POST(req) {
   try {
