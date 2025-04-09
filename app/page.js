@@ -1294,7 +1294,7 @@ export default function Dashboard() {
                     <td className="px-4 py-3 text-center">
                       <Link
                         href={{
-                          pathname: "/",
+                          pathname: "./enter_blog",
                           query: { id: item.id, tableName: activeTable },
                         }}
                       >
