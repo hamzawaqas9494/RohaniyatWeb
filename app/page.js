@@ -1424,7 +1424,7 @@ export default function Dashboard() {
       setLoading(false);
     }
   };
-
+  console.log(data, "data get form database");
   return (
     <MainLayout>
       <div>
@@ -1469,9 +1469,10 @@ export default function Dashboard() {
                   <tr key={item.id}>
                     <td className="px-4 py-3 text-center">{item.id}</td>
                     <td className="px-4 py-3 text-center">{item.title}</td>
-                    <td className="px-4 py-3 text-center">
-                      {item.content.innerText}
-                    </td>
+                    <td
+                      className="px-4 py-3 text-center"
+                      dangerouslySetInnerHTML={{ __html: item.content }}
+                    ></td>
                     <td className="px-4 py-3 flex justify-center">
                       {item.image ? (
                         <Image
