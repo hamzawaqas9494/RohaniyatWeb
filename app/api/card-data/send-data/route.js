@@ -189,9 +189,9 @@ export async function POST(req) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
       const fileName = `${Date.now()}-${file.name}`;
-      const filePath = join(process.cwd(), "public/assets", fileName);
+      const filePath = join(process.cwd(), "public/uploads", fileName);
       await writeFile(filePath, buffer);
-      imagePath = `/assets/${fileName}`;
+      imagePath = `/uploads/${fileName}`;
     }
 
     let query, queryParams;
