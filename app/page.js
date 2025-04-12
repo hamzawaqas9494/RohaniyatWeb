@@ -1364,66 +1364,66 @@ export default function Dashboard() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   fetch(`/api/card-data/get-table-data?tableName=${activeTable}`)
-  //     .then((res) => res.json())
-  //     .then((result) => {
-  //       setData(result.rows); // Set all data at once
-  //       setLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       console.error("Fetch error:", err);
-  //       setLoading(false);
-  //     });
-  // }, [activeTable]);
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/api/card-data/get-table-data?tableName=${activeTable}`)
+      .then((res) => res.json())
+      .then((result) => {
+        setData(result.rows); // Set all data at once
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Fetch error:", err);
+        setLoading(false);
+      });
+  }, [activeTable]);
 
-  ///////////////////////////////////////////////////////////////////////Handle table switch///////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////Handle table switch///////////////////////////////////////////////////////////
   const handleTableChange = (table) => {
     setActiveTable(table);
   };
 
   /////////////////////////////////////////////////////////////////////////Handle Delete Request///////////////////////////////////////////////////////////
-  // const handleDelete = async (id) => {
-  //   console.log(id, activeTable);
-  //   if (confirm("Are you sure you want to delete this item?")) {
-  //     try {
-  //       const response = await fetch(
-  //         `/api/card-data/delete-data?tableName=${activeTable}&id=${id}`,
-  //         {
-  //           method: "DELETE",
-  //         }
-  //       );
+  const handleDelete = async (id) => {
+    console.log(id, activeTable);
+    if (confirm("Are you sure you want to delete this item?")) {
+      try {
+        const response = await fetch(
+          `/api/card-data/delete-data?tableName=${activeTable}&id=${id}`,
+          {
+            method: "DELETE",
+          }
+        );
 
-  //       if (response.ok) {
-  //         alert("Item deleted successfully");
-  //         fetchData();
-  //       } else {
-  //         const result = await response.json();
-  //         alert(`Failed to delete item: ${result.message || "Unknown error"}`);
-  //       }
-  //     } catch (error) {
-  //       console.error("Delete error:", error);
-  //       alert("Error deleting item");
-  //     }
-  //   }
-  // };
+        if (response.ok) {
+          alert("Item deleted successfully");
+          fetchData();
+        } else {
+          const result = await response.json();
+          alert(`Failed to delete item: ${result.message || "Unknown error"}`);
+        }
+      } catch (error) {
+        console.error("Delete error:", error);
+        alert("Error deleting item");
+      }
+    }
+  };
 
   // Fetch data after table change
-  // const fetchData = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const res = await fetch(
-  //       `/api/card-data/get-table-data?tableName=${activeTable}`
-  //     );
-  //     const result = await res.json();
-  //     setData(result.rows);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `/api/card-data/get-table-data?tableName=${activeTable}`
+      );
+      const result = await res.json();
+      setData(result.rows);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   console.log(data, "data get form database");
   return (
     <MainLayout>
