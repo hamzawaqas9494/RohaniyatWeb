@@ -1469,25 +1469,19 @@ export default function BlogForm() {
     onUpdate: ({ editor }) => setContent(editor.getHTML()),
   });
 
-  const showMessage = (message) => {
-    setModalMessage(message);
-    setShowModal(true);
-    setTimeout(() => setShowModal(false), 5000);
-  };
-
-  const clearForm = () => {
-    setTitle("");
-    setImage(null);
-    setContent("");
-    setTableName("");
-    if (editor) editor.commands.clearContent();
-  };
-
   const handleAction = (editor, action) => {
+    // If the action is to clear content, do so
     if (action === "clearContent") {
       editor.commands.clearContent();
     } else {
-      editor.chain().focus()[action]().run();
+      // Focus and apply the action
+      editor.chain().focus();
+      if (action === "toggleBulletList" || action === "toggleOrderedList") {
+        // Apply the list formatting to the current selection or block
+        editor.chain().focus()[action]().run();
+      } else {
+        editor.chain()[action]().run();
+      }
     }
   };
 
@@ -1503,6 +1497,21 @@ export default function BlogForm() {
     { action: "redo", label: "↪ Redo", style: "text-green-500" },
     { action: "clearContent", label: "🗑 Clear", style: "text-red-500" },
   ];
+
+  ////////////////////////////////////////////eiditor end ////////////////////////////////////////////
+  const showMessage = (message) => {
+    setModalMessage(message);
+    setShowModal(true);
+    setTimeout(() => setShowModal(false), 5000);
+  };
+
+  const clearForm = () => {
+    setTitle("");
+    setImage(null);
+    setContent("");
+    setTableName("");
+    if (editor) editor.commands.clearContent();
+  };
 
   // useEffect(() => {
   //   if (typeof window !== "undefined") {
