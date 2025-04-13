@@ -44,7 +44,7 @@ export async function POST(req) {
       `,
     };
 
-    // ✅ Email to User (Confirmation)
+    // ✅ Email to User (Confirmation user)
     const userMailOptions = {
       from: `"Support Team" <$"hamzawaqas194@gmail.com"}>`,
       to: body.email,
