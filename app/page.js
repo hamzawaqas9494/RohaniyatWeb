@@ -1467,39 +1467,52 @@ export default function Dashboard() {
               ) : data.length > 0 ? (
                 data.map((item) => (
                   <tr key={item.id}>
-                    <td className="px-4 py-3 text-center">{item.id}</td>
-                    <td className="px-4 py-3 text-center">{item.title}</td>
+                    <td className="px-4 py-2 text-center">{item.id}</td>
+                    <td className="px-4 py-2 text-center font-urdu">
+                      {item.title}
+                    </td>
                     <td
-                      className="px-4 py-3 text-center"
-                      dangerouslySetInnerHTML={{ __html: item.content }}
-                    ></td>
-                    <td className="px-4 py-3 flex justify-center">
+                      className="px-4 py-2 text-center font-urdu"
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {item.content
+                        .replace(/<[^>]+>/g, "")
+                        .split(" ")
+                        .slice(0, 5)
+                        .join(" ")}
+                    </td>
+
+                    <td className="px-4 py-2 flex items-center justify-center">
                       {item.image ? (
                         <img
                           height={8}
                           width={8}
                           src={item.image}
-                          className="w-16 h-16 object-cover"
+                          className="w-10 h-10 object-cover"
                           alt=""
                         />
                       ) : (
                         "No Image"
                       )}
                     </td>
-                    <td className="px-4 py-3 text-center">
+                    <td className="px-4 py-2 text-center">
                       <Link
                         href={{
                           pathname: "./enter_blog",
                           query: { id: item.id, tableName: activeTable },
                         }}
                       >
-                        <button className="bg-blue-600 text-white px-4 py-3 rounded-md mr-2">
+                        <button className="bg-blue-600 text-white p-2 rounded-md mr-2">
                           Update
                         </button>
                       </Link>
                       <button
                         onClick={() => handleDelete(item.id)}
-                        className="bg-red-500 text-white px-4 py-3 rounded-md ml-2"
+                        className="bg-red-500 text-white p-2 rounded-md ml-2"
                       >
                         Delete
                       </button>
