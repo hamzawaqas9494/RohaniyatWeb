@@ -1622,10 +1622,10 @@ export default function BlogForm() {
             className="px-1 py-2.5 w-full text-[#6C472D] font-semibold border-2 border-[#6C472D] rounded-md bg-white outline-none"
           >
             <option value="">Select Table</option>
+            <option value="tawaiz">tawaiz</option>
             <option value="wazaif">wazaif</option>
-            <option value="jado_tona_alaj">jado_tona_alaj</option>
-            <option value="mujrab_nakosh">mujrab_nakosh</option>
             <option value="qutab">qutab</option>
+            <option value="mujrab_nakosh">rohani_ilaj</option>
           </select>
         </div>
 

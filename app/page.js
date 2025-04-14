@@ -1357,7 +1357,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 // Updated list of tables
-const allowedTables = ["wazaif", "jado_tona_alaj", "mujrab_nakosh", "qutab"];
+const allowedTables = ["tawaiz", "wazaif", "qutab", "rohani_ilaj"];
 
 export default function Dashboard() {
   const [activeTable, setActiveTable] = useState("wazaif"); // Default

@@ -37,30 +37,31 @@ export async function GET() {
     console.log("Existing table dropped.");
 
     // Create the "wazaif" table
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS tawaiz (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        image VARCHAR(255),
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS rohani_ilaj (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        image VARCHAR(255),
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+
     await pool.query(`
       CREATE TABLE IF NOT EXISTS wazaif (
-        id SERIAL PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        image VARCHAR(255),
-        content TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT NOW(),
-        updated_at TIMESTAMP DEFAULT NOW()
-      );
-    `);
-
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS jado_tona_alaj (
-        id SERIAL PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        image VARCHAR(255),
-        content TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT NOW(),
-        updated_at TIMESTAMP DEFAULT NOW()
-      );
-    `);
-
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS mujrab_nakosh (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
