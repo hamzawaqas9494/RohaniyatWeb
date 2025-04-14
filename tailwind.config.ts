@@ -14,7 +14,8 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ["Open Sans", ...defaultTheme.fontFamily.sans],
+        // sans: ["Open Sans", ...defaultTheme.fontFamily.sans],
+        urdu: ['UrduFont', 'sans-serif'], 
       },
     },
   },

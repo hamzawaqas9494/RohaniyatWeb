@@ -16,7 +16,7 @@ const Navbar = ({ handleSideBarStatus }) => {
             aria-expanded="true"
             aria-controls="sidebar"
             onClick={toggleSidebar}
-            className="cursor-pointer rounded lg:p-2 text-white hover:bg-gray-100 hover:text-gray-900"
+            className="cursor-pointer rounded lg:p-2 text-[#6C472D] bg-gray-100"
           >
             <svg
               className="h-6 w-6"

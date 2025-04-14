@@ -5,13 +5,13 @@ export default function ProfileDropdown() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button className="rounded-full flex">
-        {/* <Image
-         width={8}
-         height={8}
-          className="h-12 w-12 rounded-full"
-          src="/public/uploads/1744112153010-activitylog.JPG"
+        <Image
+          width={48}
+          height={48}
+          className="h-12 w-12 rounded-full object-cover"
+          src="/assets/images/logo.jpg"
           alt="User"
-        /> */}
+        />
       </Menu.Button>
 
       <Transition
