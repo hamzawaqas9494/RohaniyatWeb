@@ -27,6 +27,7 @@
 // }
 
 import pool from "../../../../lib/db"; // Adjust the path based on your project structure
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
