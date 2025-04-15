@@ -171,7 +171,14 @@ export async function POST(req) {
       );
     }
 
-    const allowedTables = ["tawaiz", "rohani_ilaj", "wazaif", "qutab"];
+    const allowedTables = [
+      "Taweez",
+      "Wazaif",
+      "Qutb",
+      "Rohani_ilaaj",
+      "Taweezat_Usmaniya",
+      "Rohani_Dokan",
+    ];
     if (!allowedTables.includes(tableName)) {
       return new Response(JSON.stringify({ error: "Invalid table name" }), {
         status: 400,

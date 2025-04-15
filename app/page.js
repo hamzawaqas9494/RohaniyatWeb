@@ -1357,10 +1357,16 @@ import Link from "next/link";
 import Image from "next/image";
 
 // Updated list of tables
-const allowedTables = ["tawaiz", "wazaif", "qutab", "rohani_ilaj"];
-
+const allowedTables = [
+  "Taweez",
+  "Wazaif",
+  "Qutb",
+  "Rohani_ilaaj",
+  "Taweezat_Usmaniya",
+  "Rohani_Dokan",
+];
 export default function Dashboard() {
-  const [activeTable, setActiveTable] = useState("tawaiz"); // Default
+  const [activeTable, setActiveTable] = useState("Tawaiz"); // Default
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -1434,7 +1440,7 @@ export default function Dashboard() {
             <div
               key={table}
               onClick={() => handleTableChange(table)}
-              className={`cursor-pointer h-28 flex items-center justify-center rounded-md transition-all duration-300 font-semibold capitalize ${
+              className={`cursor-pointer h-28 flex items-center justify-center rounded-md transition-all duration-300 font-semibold  ${
                 activeTable === table
                   ? "bg-[#6C472D] text-white"
                   : "bg-white text-[#6C472D] border-2 border-[#D4AF37]"

@@ -39,7 +39,7 @@ export async function GET() {
     // Create the "wazaif" table
 
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS tawaiz (
+      CREATE TABLE IF NOT EXISTS Tawaiz (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
@@ -50,7 +50,7 @@ export async function GET() {
     `);
 
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS rohani_ilaj (
+      CREATE TABLE IF NOT EXISTS Wazaif (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
@@ -61,7 +61,7 @@ export async function GET() {
     `);
 
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS wazaif (
+      CREATE TABLE IF NOT EXISTS Qutab (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
@@ -70,9 +70,28 @@ export async function GET() {
         updated_at TIMESTAMP DEFAULT NOW()
       );
     `);
-
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS qutab (
+      CREATE TABLE IF NOT EXISTS Rohani_Ilaj (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        image VARCHAR(255),
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS Tawaizat_Usmaniya (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        image VARCHAR(255),
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS Rohani_Dokhan (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),

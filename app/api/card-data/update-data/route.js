@@ -6,7 +6,14 @@ export async function GET(req) {
     const tableName = searchParams.get("tableName");
     const id = searchParams.get("id");
 
-    const allowedTables = ["tawaiz", "rohani_ilaj", "wazaif", "qutab"];
+    const allowedTables = [
+      "Taweez",
+      "Wazaif",
+      "Qutb",
+      "Rohani_ilaaj",
+      "Taweezat_Usmaniya",
+      "Rohani_Dokan",
+    ];
 
     if (!tableName || !allowedTables.includes(tableName)) {
       return new Response(JSON.stringify({ error: "Invalid table name" }), {
