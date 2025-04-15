@@ -1360,7 +1360,7 @@ import Image from "next/image";
 const allowedTables = ["tawaiz", "wazaif", "qutab", "rohani_ilaj"];
 
 export default function Dashboard() {
-  const [activeTable, setActiveTable] = useState("wazaif"); // Default
+  const [activeTable, setActiveTable] = useState("tawaiz"); // Default
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
