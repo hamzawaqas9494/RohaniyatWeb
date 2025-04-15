@@ -22,7 +22,7 @@ export async function POST(req) {
     });
 
     const adminMailOptions = {
-      from: `"New Request from ${body.name}" <${body.email}>`,
+      from: `"New Request from ${body.patientName}" <${body.email}>`,
       to: "hamzawaqas194@gmail.com",
       subject: "New Form Submission Received",
       html: `
@@ -46,7 +46,7 @@ export async function POST(req) {
       to: body.email,
       subject: "Your Form Submission Received",
       html: `
-        <p>Hello <strong>${body.name}</strong>,</p>
+        <p>Hello <strong>${body.patientName}</strong>,</p>
         <p>We have received your request and will get back to you soon.</p>
         <p>Regards,<br/>Support Team</p>
       `,
