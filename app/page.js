@@ -1361,12 +1361,12 @@ const allowedTables = [
   "Taweez",
   "Wazaif",
   "Qutb",
-  "Rohani_ilaaj",
+  "Rohani_Ilaaj",
   "Taweezat_Usmaniya",
   "Rohani_Dokan",
 ];
 export default function Dashboard() {
-  const [activeTable, setActiveTable] = useState("Tawaiz"); // Default
+  const [activeTable, setActiveTable] = useState("Taweez"); // Default
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 

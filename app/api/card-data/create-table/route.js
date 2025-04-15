@@ -39,7 +39,7 @@ export async function GET() {
     // Create the "wazaif" table
 
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS Tawaiz (
+      CREATE TABLE IF NOT EXISTS Taweez (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
@@ -61,7 +61,7 @@ export async function GET() {
     `);
 
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS Qutab (
+      CREATE TABLE IF NOT EXISTS Qutb (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
@@ -71,7 +71,7 @@ export async function GET() {
       );
     `);
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS Rohani_Ilaj (
+      CREATE TABLE IF NOT EXISTS Rohani_Ilaaj (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
