@@ -114,18 +114,18 @@ export default function Dashboard() {
           <table className="min-w-full divide-y divide-gray-200 border-2 border-[#D4AF37] rounded-md" style={{ direction: 'rtl' }}>
             <thead className="bg-[#6C472D]">
               <tr>
-                <th className="py-3 font-semibold text-white font-urdu">نمبر شمار</th>
-                <th className="py-3 font-semibold text-white font-urdu">عنوان</th>
-                <th className="py-3 font-semibold text-white font-urdu">مواد</th>
-                <th className="py-3 font-semibold text-white font-urdu">تصویر</th>
-                <th className="py-3 font-semibold text-white font-urdu">ختم/تبدیل</th>
+                <th className="w-1/5 py-3 font-semibold text-white font-urdu">نمبر شمار</th>
+                <th className="w-1/5 py-3 font-semibold text-white font-urdu">عنوان</th>
+                <th className="w-1/5 py-3 font-semibold text-white font-urdu">مواد</th>
+                <th className="w-1/5 py-3 font-semibold text-white font-urdu">تصویر</th>
+                <th className="w-1/5 py-3 font-semibold text-white font-urdu">ختم/تبدیل</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-6">
-                    Loading...
+                  <td colSpan={5} className="text-center py-6 font-urdu">
+                  براہِ کرم انتظار کریں
                   </td>
                 </tr>
               ) : data.length > 0 ? (
@@ -188,9 +188,9 @@ export default function Dashboard() {
                 <tr>
                   <td
                     colSpan={5}
-                    className="text-center py-6 bg-[#6C472D] text-white font-semibold"
+                    className="text-center py-6 bg-[#6C472D] text-white font-semibold font-urdu"
                   >
-                    No Record Found
+                    کوئی ریکارڈ دستیاب نہیں ہے
                   </td>
                 </tr>
               )}
