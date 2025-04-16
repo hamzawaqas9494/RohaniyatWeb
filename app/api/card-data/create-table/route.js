@@ -1,43 +1,18 @@
-// import pool from "../../../../lib/db";
-
-// export async function GET() {
-//   try {
-//     // await pool.query(`DROP TABLE IF EXISTS wazaif;`);
-//     // console.log("Existing table dropped.");
-
-//     // console.log("Creating wazaif table...");
-//     await pool.query(`
-//       CREATE TABLE IF NOT EXISTS wazaif (
-//         id SERIAL PRIMARY KEY,
-//         title VARCHAR(255) NOT NULL,
-//         image VARCHAR(255),
-//         content TEXT NOT NULL
-
-//       );
-//     `);
-
-//     console.log("Table created successfully.");
-//     return new Response("Table created successfully", { status: 200 });
-//   } catch (error) {
-//     console.error("Error creating table:", error);
-//     return new Response(`Error creating table: ${error.message}`, {
-//       status: 500,
-//     });
-//   }
-// }
-
 import pool from "../../../../lib/db"; // Adjust the path based on your project structure
 export const dynamic = "force-dynamic";
-
 export async function GET() {
   try {
     await pool.query(`
-      DROP TABLE IF EXISTS wazaif, jado_tona_alaj, mujrab_nakosh, qutab;
+      DROP TABLE IF EXISTS
+        Taweez,
+        Wazaif,
+        Qutb,
+        Rohani_Ilaaj,
+        Tawizat_Usmaniya,
+        Rohani_Dokan;
     `);
-    console.log("Existing table dropped.");
-
-    // Create the "wazaif" table
-
+    console.log("Existing tables dropped.");
+    ///////////////////////////////// Create the "Taweez" table///////////////////////////////////////////
     await pool.query(`
       CREATE TABLE IF NOT EXISTS Taweez (
         id SERIAL PRIMARY KEY,
@@ -48,6 +23,7 @@ export async function GET() {
         updated_at TIMESTAMP DEFAULT NOW()
       );
     `);
+        ///////////////////////////////// Create the "Wazaif" table///////////////////////////////////////////
 
     await pool.query(`
       CREATE TABLE IF NOT EXISTS Wazaif (
@@ -59,6 +35,7 @@ export async function GET() {
         updated_at TIMESTAMP DEFAULT NOW()
       );
     `);
+        ///////////////////////////////// Create the "Qutb" table///////////////////////////////////////////
 
     await pool.query(`
       CREATE TABLE IF NOT EXISTS Qutb (
@@ -70,6 +47,8 @@ export async function GET() {
         updated_at TIMESTAMP DEFAULT NOW()
       );
     `);
+        ///////////////////////////////// Create the "Rohani_Ilaaj" table///////////////////////////////////////////
+
     await pool.query(`
       CREATE TABLE IF NOT EXISTS Rohani_Ilaaj (
         id SERIAL PRIMARY KEY,
@@ -80,8 +59,9 @@ export async function GET() {
         updated_at TIMESTAMP DEFAULT NOW()
       );
     `);
+        ///////////////////////////////// Create the "Tawizat_Usmaniya" table///////////////////////////////////////////
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS Tawaizat_Usmaniya (
+      CREATE TABLE IF NOT EXISTS Tawizat_Usmaniya (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
@@ -90,8 +70,9 @@ export async function GET() {
         updated_at TIMESTAMP DEFAULT NOW()
       );
     `);
+        ///////////////////////////////// Create the "Rohani_Dokan" table///////////////////////////////////////////
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS Rohani_Dokhan (
+      CREATE TABLE IF NOT EXISTS Rohani_Dokan (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
@@ -100,7 +81,7 @@ export async function GET() {
         updated_at TIMESTAMP DEFAULT NOW()
       );
     `);
-
+    
     console.log("All tables created successfully.");
     return new Response("All tables created successfully", { status: 200 });
   } catch (error) {

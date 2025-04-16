@@ -1,13 +1,9 @@
-// app/api/card-data/delete-data/route.js
-
 import pool from "../../../../lib/db";
 export const dynamic = "force-dynamic";
-
 export async function DELETE(req) {
   const { searchParams } = new URL(req.url); // Correct way to parse query params
   const tableName = searchParams.get("tableName");
   const id = searchParams.get("id");
-
   if (!tableName || !id) {
     return new Response(
       JSON.stringify({ message: "Table name and ID are required" }),
@@ -16,14 +12,12 @@ export async function DELETE(req) {
       }
     );
   }
-
   try {
     // Construct dynamic SQL query based on tableName
     const query = `DELETE FROM ${tableName} WHERE id = $1 RETURNING *`;
     const result = await pool.query(query, [id]);
-
     if (result.rowCount > 0) {
-      return new Response(
+     return new Response(
         JSON.stringify({ message: "Item deleted successfully" }),
         {
           status: 200,

@@ -1,18 +1,14 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-
 export async function POST(req) {
   try {
     const body = await req.json();
-    console.log(body, "Received data from React Native app");
-
-    if (!body.patientName || !body.email) {
+        if (!body.patientName || !body.email) {
       return NextResponse.json(
         { error: "Name and Email are required!" },
         { status: 400 }
       );
     }
-
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -20,7 +16,6 @@ export async function POST(req) {
         pass: "owzk pebp cdlo fupz",
       },
     });
-
     const adminMailOptions = {
       from: `"New Request from ${body.patientName}" <${body.email}>`,
       to: "hamzawaqas194@gmail.com",
@@ -39,8 +34,6 @@ export async function POST(req) {
         <p>Reply directly to this email to respond to the user.</p>
       `,
     };
-
-    // ✅ Email to User (Confirmation user)
     const userMailOptions = {
       from: `"Support Team" <${body.email}>`,
       to: body.email,
@@ -51,11 +44,8 @@ export async function POST(req) {
         <p>Regards,<br/>Support Team</p>
       `,
     };
-
-    // 📬 Send Emails
     await transporter.sendMail(adminMailOptions);
     await transporter.sendMail(userMailOptions);
-
     return NextResponse.json(
       { message: "Email sent successfully to Admin & User" },
       { status: 200 }
@@ -68,7 +58,6 @@ export async function POST(req) {
     );
   }
 }
-
 export async function GET() {
   return NextResponse.json({ error: "Method Not Allowed" }, { status: 405 });
 }
