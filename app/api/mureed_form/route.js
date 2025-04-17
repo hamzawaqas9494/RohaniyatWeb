@@ -28,8 +28,11 @@ export async function POST(req) {
         <p><strong>Mother Name:</strong> ${body.motherName || "N/A"}</p>
         <p><strong>Country:</strong> ${body.country || "N/A"}</p>
         <p><strong>City:</strong> ${body.cityName || "N/A"}</p>
+           <p><strong>Date of Birth:</strong> ${body.day}-${body.month}-${
+        body.year
+      }</p>
         <p><strong>Age:</strong> ${body.age || "N/A"}</p>
-        <p><strong>Date of Birth:</strong> ${body.dateOfBirth || "N/A"}</p>
+       
         <p><strong>Gender:</strong> ${body.gender || "N/A"}</p>
         <p><strong>Status:</strong> ${body.status || "N/A"}</p>
         <p><strong>WhatsApp Number:</strong> ${body.whatsappNumber || "N/A"}</p>
