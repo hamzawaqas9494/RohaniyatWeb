@@ -33,8 +33,8 @@ const Navbar = ({ handleSideBarStatus }) => {
           </button>
         </div>
         <div className="flex items-center text-white">
-          <p className="mr-2 text-sm md:text-base font-semibold">
-            Hafiz M.Usman
+          <p className="mr-2 text-sm md:text-base font-semibold font-urdu">
+          حافظ محمد عثمان
           </p>
           <ProfileDropdown />
         </div>
