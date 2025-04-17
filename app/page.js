@@ -124,7 +124,7 @@ export default function Dashboard() {
             <tbody className="divide-y divide-gray-200 bg-white">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-6 font-urdu">
+                  <td colSpan={5} className="text-center py-6 font-urdu text-[#6C472D]">
                   براہِ کرم انتظار کریں
                   </td>
                 </tr>
