@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 export async function POST(req) {
   try {
     const body = await req.json();
-        if (!body.patientName || !body.email) {
+    if (!body.patientName || !body.email) {
       return NextResponse.json(
         { error: "Name and Email are required!" },
         { status: 400 }
@@ -29,7 +29,7 @@ export async function POST(req) {
         <p><strong>City:</strong> ${body.cityName || "N/A"}</p>
         <p><strong>WhatsApp Number:</strong> ${body.whatsappNumber || "N/A"}</p>
         <p><strong>Email:</strong> ${body.email}</p>
-        <p><strong>Nature of Bait:</strong> ${body.disease || "N/A"}</p>
+        <p><strong>Nature of Bait:</strong> ${body.Desease || "N/A"}</p>
         <hr/>
         <p>Reply directly to this email to respond to the user.</p>
       `,
