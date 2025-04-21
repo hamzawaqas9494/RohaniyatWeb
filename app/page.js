@@ -5,25 +5,25 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 const allowedTables = [
-  "Taweez",
-  "Wazaif",
-  "Qutb",
-  "Rohani_Ilaaj",
-  "Tawizat_Usmaniya",
-  "Rohani_Dokan",
+  "taweez",
+  "wazaif",
+  "qutb",
+  "rohaniilaaj",
+  "tawizatusmaniya",
+  "rohanidokan",
 ];
 
 // Mapping English table names to Urdu
 const tableNameMap = {
-  "Taweez": "تعویذ",
-  "Wazaif": "وظائف",
-  "Qutb": "قطب",
-  "Rohani_Ilaaj": "روحانی علاج",
-  "Tawizat_Usmaniya": "تعویذات عثمانیہ",
-  "Rohani_Dokan": "روحانی دکان",
+  "taweez": "تعویذ",
+  "wazaif": "وظائف",
+  "qutb": "قطب",
+  "rohaniilaaj": "روحانی علاج",
+  "tawizatusmaniya": "تعویذات عثمانیہ",
+  "rohanidokan": "روحانی دکان",
 };
 export default function Dashboard() {
-  const [activeTable, setActiveTable] = useState("Taweez"); // Default
+  const [activeTable, setActiveTable] = useState("taweez"); // Default
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {

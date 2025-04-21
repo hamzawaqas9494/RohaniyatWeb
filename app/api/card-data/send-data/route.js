@@ -19,12 +19,12 @@ export async function POST(req) {
       );
     }
     const allowedTables = [
-      "Taweez",
-      "Wazaif",
-      "Qutb",
-      "Rohani_ilaaj",
-      "Taweezat_Usmaniya",
-      "Rohani_Dokan",
+      "taweez",
+      "wazaif",
+      "qutb",
+      "rohaniilaaj",
+      "tawizatusmaniya",
+      "rohanidokan",
     ];
     if (!allowedTables.includes(tableName)) {
       return new Response(JSON.stringify({ error: "Invalid table name" }), {

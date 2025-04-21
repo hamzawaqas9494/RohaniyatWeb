@@ -170,12 +170,12 @@ export default function BlogForm() {
             className="px-2 py-2.5 w-full text-[#6C472D] text-right  font-semibold border-2 border-[#6C472D] rounded-md bg-white outline-none"
           >
             <option value="">ٹیبل منتخب کریں</option>
-            <option value="Taweez">تعویذ</option>
-            <option value="Wazaif">وظائف</option>
-            <option value="Qutb">قطب</option>
-            <option value="Rohani_Ilaaj">روحانی علاج</option>
-            <option value="Tawizat_Usmaniya">تعویزات عثمانیہ</option>
-            <option value="Rohani_Dokan">روحانی دکان</option>
+            <option value="taweez">تعویذ</option>
+            <option value="wazaif">وظائف</option>
+            <option value="qutb">قطب</option>
+            <option value="rohaniilaaj">روحانی علاج</option>
+            <option value="tawizatusmaniya">تعویزات عثمانیہ</option>
+            <option value="rohanidokan">روحانی دکان</option>
           </select>
         </div>
         <div className="col-span-12 md:col-span-6">
