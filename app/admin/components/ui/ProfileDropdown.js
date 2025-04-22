@@ -28,7 +28,7 @@ export default function ProfileDropdown() {
               <a
                 href="#"
                 className={`block p-1 md:p-2 text-sm text-[#6C472D] ${
-                  active ? "bg-gray-200" : "text-[#6C472D]"
+                  active ? "bg-[#6C472D] text-white" : "text-[#6C472D]"
                 }`}
               >
                 Account settings
@@ -40,7 +40,7 @@ export default function ProfileDropdown() {
               <button
                 type="submit"
                 className={`block p-1 md:p-2 text-sm w-full text-left text-[#6C472D] ${
-                  active ? "bg-gray-200" : "text-[#6C472D]"
+                  active ? "bg-[#6C472D] text-white" : "text-[#6C472D]"
                 }`}
               >
                 Sign out

@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: 'UrduFont';
-  src: url('/assets/fonts/NotoNastaliqUrdu-Regular.ttf') format('truetype');
+  src: url('/assets/fonts/JameelNooriNastaleeqRegular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -31,6 +31,9 @@ body {
 }
 .font-urdu {
   font-family: 'UrduFont', serif;
+}
+.text-direction-right {
+  direction: rtl;
 }
 .nav-item button:after {
   content: "";

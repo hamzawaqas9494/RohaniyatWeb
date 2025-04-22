@@ -93,25 +93,25 @@ export default function Dashboard() {
     <MainLayout>
       <div>
         {/* Cards for table selection */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4 font-urdu">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2 sm:gap-4 mb-2 md:mb-4 sm:text-xl font-urdu">
         {allowedTables.map((table) => (
             <div
               key={table}
               onClick={() => handleTableChange(table)}
-              className={`cursor-pointer h-24 flex items-center justify-center rounded-md transition-all duration-300 font-semibold  ${
+              className={`cursor-pointer h-16 sm:h-20 md:h-24 flex items-center justify-center rounded-md transition-all duration-300 font-semibold  ${
                 activeTable === table
                   ? "bg-[#6C472D] text-white"
                   : "bg-white text-[#6C472D] border-2 border-[#D4AF37]"
               }`}
             >
               {/* Display Urdu table name */}
-              {tableNameMap[table] || table} {/* Fallback to English if Urdu name doesn't exist */}
+              {tableNameMap[table] || table} 
             </div>
           ))}
         </div>
        {/* /////////////////////////////////////////////////////Table displaying data//////////////////////////////////////////////// */}
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 border-2 border-[#D4AF37] rounded-md" style={{ direction: 'rtl' }}>
+        <div className="w-full overflow-x-auto sm:overflow-x-visible">
+          <table className="w-[600px] sm:w-full m-auto divide-y divide-gray-200 border-2 border-[#D4AF37] rounded-md text-direction-right" >
             <thead className="bg-[#6C472D]">
               <tr>
                 <th className="w-1/5 py-3 font-semibold text-white font-urdu">نمبر شمار</th>
@@ -124,34 +124,31 @@ export default function Dashboard() {
             <tbody className="divide-y divide-gray-200 bg-white">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-6 font-urdu text-[#6C472D]">
+                  <td colSpan={5} className="py-6 text-center font-urdu text-[#6C472D]">
                   براہِ کرم انتظار کریں
                   </td>
                 </tr>
               ) : data.length > 0 ? (
                 data.map((item) => (
                   <tr key={item.id}>
-                    <td className="px-4 py-2 text-center">{item.id}</td>
-                    <td className="px-4 py-2 text-center font-urdu">
-                      {item.title}
+                    <td className="sm:px-4 py-2 text-center">{item.id}</td>
+                    <td className="sm:px-4 py-2 text-center font-urdu">
+                    {item.title
+                        ? item.title
+                            .replace(/<[^>]+>/g, "") 
+                            .slice(0, 20) + "...." 
+                        : "no data found"}
                     </td>
                     <td
-                      className="px-4 py-2 text-center font-urdu"
-                      style={{
-                        direction: "rtl",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        maxWidth: "150px", 
-                      }}
+                      className="sm:px-4 py-2 text-center text-direction-right font-urdu"
                     >
                       {item.content
                         ? item.content
                             .replace(/<[^>]+>/g, "") 
-                            .slice(0, 25) + "" 
+                            .slice(0, 20) + "...." 
                         : "no data found"}
                     </td>
-                    <td className="px-4 py-2 flex items-center justify-center">
+                    <td className="py-2 sm:px-4 flex items-center justify-center">
                       {item.image ? (
                         <img
                           height={8}
@@ -164,22 +161,22 @@ export default function Dashboard() {
                         "No Image"
                       )}
                     </td>
-                    <td className="px-4 py-2 text-center">
+                    <td className="px-1 py-2 md:px-2 text-center">
                       <Link
                         href={{
                           pathname: "./enter_blog",
                           query: { id: item.id, tableName: activeTable },
                         }}
                       >
-                        <button className="bg-blue-600 text-white p-2 rounded-md ml-2">
-                          Update
+                        <button className="px-4 py-2 ml-2 bg-blue-600 text-white rounded-md font-urdu ">
+                        تبدیل
                         </button>
                       </Link>
                       <button
                         onClick={() => handleDelete(item.id)}
-                        className="bg-red-500 text-white p-2 rounded-md ml-2"
+                        className="px-4 py-2 bg-red-500 text-white rounded-md font-urdu"
                       >
-                        Delete
+                        ختم
                       </button>
                     </td>
                   </tr>

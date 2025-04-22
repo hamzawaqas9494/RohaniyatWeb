@@ -62,8 +62,6 @@ export default function BlogForm() {
     { action: "toggleItalic", label: "I", style: "italic" },
     { action: "toggleUnderline", label: "U", style: "underline" },
     { action: "toggleStrike", label: "S", style: "line-through" },
-    { action: "toggleBulletList", label: "• List", style: "font-bold" },
-    { action: "toggleOrderedList", label: "1. List", style: "font-bold" },
     { action: "toggleHighlight", label: "✦ Highlight", style: "bg-yellow-300" },
     { action: "undo", label: "↩ Undo", style: "text-blue-500" },
     { action: "redo", label: "↪ Redo", style: "text-green-500" },
@@ -166,8 +164,8 @@ export default function BlogForm() {
         <div className="col-span-12 md:col-span-3">
           <select
             value={tableName || ""}
-            onChange={(e) => setTableName(e.target.value)}
-            className="px-2 py-2.5 w-full text-[#6C472D] text-right  font-semibold border-2 border-[#6C472D] rounded-md bg-white outline-none"
+            onChange={(e) => setTableName(e.target.value)} 
+            className="p-2 w-full text-[#6C472D] text-right text-xl font-urdu font-semibold border-2 border-[#6C472D] rounded-md bg-white outline-none"
           >
             <option value="">ٹیبل منتخب کریں</option>
             <option value="taweez">تعویذ</option>
@@ -185,13 +183,13 @@ export default function BlogForm() {
             placeholder="عنوان یہاں لکھیں"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="p-[0.45rem] w-full text-right text-[#6C472D] font-semibold border-2 border-[#6C472D] rounded-md bg-white outline-none placeholder-[#6C472D]"
+            className="p-3 w-full text-right text-[#6C472D] text-xl font-urdu font-semibold border-2 border-[#6C472D] rounded-md bg-white outline-none placeholder-[#6C472D]"
           />
         </div>
         <div className="col-span-12 md:col-span-3">
           <label
             htmlFor="image-upload"
-            className="block p-[0.45rem] w-full text-[#6C472D] text-right font-semibold border-2 border-[#6C472D] rounded-md bg-white cursor-pointer truncate"
+            className="block p-3 w-full text-[#6C472D] font-urdu text-xl text-right font-semibold border-2 border-[#6C472D] rounded-md bg-white cursor-pointer truncate"
             title={image ? image.name || image : "Upload an image"}
           >
             {image ? image.name || image : "تصویر اپلوڈ کریں"}
@@ -208,7 +206,7 @@ export default function BlogForm() {
           <div className="px-2 py-3 border-2 border-[#D4AF37] w-full rounded-md bg-white ">
             {editor && renderToolbar(editor)}
             <div
-              className="mt-3 border-2 border-[#D4AF37] rounded-md text-right"
+              className="mt-3 border-2 border-[#D4AF37] text-xl rounded-md text-right font-urdu"
               dir="rtl"
             >
               <EditorContent editor={editor} />
