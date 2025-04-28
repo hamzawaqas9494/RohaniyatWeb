@@ -2,19 +2,19 @@ import pool from "../../../../lib/db"; // Adjust the path based on your project 
 export const dynamic = "force-dynamic";
 export async function GET() {
   try {
-    await pool.query(`
-      DROP TABLE IF EXISTS
-        Taweez,
-        Wazaif,
-        Qutb,
-        Rohani_Ilaaj,
-        Tawizat_Usmaniya,
-        Rohani_Dokan;
-    `);
+    // await pool.query(`
+    //   DROP TABLE IF EXISTS
+    //     Taweez,
+    //     Wazaif,
+    //     Qutb,
+    //     Rohani_ilaaj,
+    //     Tawizat_Usmaniya,
+    //     Rohani_Dokan;
+    // `);
     console.log("Existing tables dropped.");
     ///////////////////////////////// Create the "Taweez" table///////////////////////////////////////////
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS Taweez (
+      CREATE TABLE IF NOT EXISTS taweez (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
@@ -26,7 +26,7 @@ export async function GET() {
         ///////////////////////////////// Create the "Wazaif" table///////////////////////////////////////////
 
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS Wazaif (
+      CREATE TABLE IF NOT EXISTS wazaif (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
@@ -38,7 +38,7 @@ export async function GET() {
         ///////////////////////////////// Create the "Qutb" table///////////////////////////////////////////
 
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS Qutb (
+      CREATE TABLE IF NOT EXISTS qutb (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
@@ -50,7 +50,7 @@ export async function GET() {
         ///////////////////////////////// Create the "Rohani_Ilaaj" table///////////////////////////////////////////
 
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS Rohani_Ilaaj (
+      CREATE TABLE IF NOT EXISTS rohaniilaaj (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
@@ -61,7 +61,7 @@ export async function GET() {
     `);
         ///////////////////////////////// Create the "Tawizat_Usmaniya" table///////////////////////////////////////////
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS Tawizat_Usmaniya (
+      CREATE TABLE IF NOT EXISTS tawizatusmaniya (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),
@@ -72,7 +72,7 @@ export async function GET() {
     `);
         ///////////////////////////////// Create the "Rohani_Dokan" table///////////////////////////////////////////
     await pool.query(`
-      CREATE TABLE IF NOT EXISTS Rohani_Dokan (
+      CREATE TABLE IF NOT EXISTS rohanidokan (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
         image VARCHAR(255),

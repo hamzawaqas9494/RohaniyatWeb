@@ -9,7 +9,7 @@ const Navbar = ({ handleSideBarStatus }) => {
 
   return (
     <nav className="w-full fixed top-0 z-50 bg-[#6C472D]">
-      <div className="px-2 md:px-4 min-h-[10vh] flex items-center justify-between">
+      <div className="px-2 md:px-4 min-h-[8vh] sm:min-h-[10vh] flex items-center justify-between">
         <div className="flex items-center">
           <button
             id="toggleSidebar"
@@ -33,7 +33,7 @@ const Navbar = ({ handleSideBarStatus }) => {
           </button>
         </div>
         <div className="flex items-center text-white">
-          <p className="mr-2 text-sm md:text-base font-semibold font-urdu">
+          <p className="mr-2 text-xl font-semibold font-urdu">
           حافظ محمد عثمان
           </p>
           <ProfileDropdown />

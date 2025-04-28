@@ -11,10 +11,10 @@ const MainLayout = ({ children }) => {
     <>
       <Navbar handleSideBarStatus={() => setShowSideBar(!showSideBar)} />
       <main>
-        <div className="flex mt-[10vh] mb-[10vh] md:min-h-[80vh]">
+        <div className="flex mb-[8vh] mt-[8vh] sm:mb-[10vh] sm:mt-[10vh] min-h-[84vh] sm:min-h-[80vh]">
           <Sidebar showSideBar={showSideBar} />
           <div
-            className={`relative h-full w-full transition-all duration-300 bg-[#EFEADF] md:min-h-[80vh] p-2 md:px-4 md:py-8 ${
+            className={`relative h-full w-full transition-all duration-300 bg-[#EFEADF] min-h-[84vh] sm:min-h-[80vh] p-2 md:px-4 md:py-8 ${
               showSideBar ? "lg:ml-64" : "lg:ml-0"
             }`}
           >
