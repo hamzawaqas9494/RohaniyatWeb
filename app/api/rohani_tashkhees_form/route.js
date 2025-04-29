@@ -37,7 +37,7 @@ export async function POST(req) {
         <p><strong>Status:</strong> ${body.status || "N/A"}</p>
         <p><strong>WhatsApp Number:</strong> ${body.whatsappNumber || "N/A"}</p>
         <p><strong>Email:</strong> ${body.email}</p>
-        <p><strong>Nature of Bait:</strong> ${body.problemdescription || "N/A"}</p>
+        <p><strong>Nature of Bait:</strong> ${body.spirtualproblems || "N/A"}</p>
         <hr/>
         <p>Reply directly to this email to respond to the user.</p>
       `,
