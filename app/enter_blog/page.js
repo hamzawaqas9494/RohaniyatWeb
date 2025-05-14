@@ -174,6 +174,13 @@ export default function BlogForm() {
             <option value="rohaniilaaj">روحانی علاج</option>
             <option value="tawizatusmaniya">تعویزات عثمانیہ</option>
             <option value="rohanidokan">روحانی دکان</option>
+            <option value="nooriaamal">نوری اعمال</option>
+            <option value="noorialviaamal">نوری علوی اعمال</option>
+            <option value="ooliaallahkaamal">اولیاء اللہ کے اعمال</option>
+            <option value="bamokalamal">با موکل اعمال</option>
+            <option value="khasulkhasammal">خاص الخالص اعمال</option>
+            <option value="alviamal">علوی اعمال</option>
+            <option value="saflitavezat">سفلی تعویذات</option>
           </select>
         </div>
         <div className="col-span-12 md:col-span-6">

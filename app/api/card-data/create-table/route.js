@@ -81,6 +81,82 @@ export async function GET() {
         updated_at TIMESTAMP DEFAULT NOW()
       );
     `);
+        ///////////////////////////////// Create the "nooriaamal" table///////////////////////////////////////////
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS nooriaamal (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        image VARCHAR(255),
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      );
+    `);    ///////////////////////////// Create the "noorialviaamal" table///////////////////////////////////////////
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS noorialviaamal (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        image VARCHAR(255),
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+        ////////////////////////////// Create the "ooliaallahkaamal" table///////////////////////////////////////////
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS ooliaallahkaamal (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        image VARCHAR(255),
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+        ///////////////////////////////// Create the "bamokalamal" table///////////////////////////////////////////
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS bamokalamal (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        image VARCHAR(255),
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+        ///////////////////////////////// Create the "khasulkhasammal" table///////////////////////////////////////////
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS khasulkhasammal (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        image VARCHAR(255),
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+        ///////////////////////////////// Create the "alviamal" table///////////////////////////////////////////
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS alviamal (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        image VARCHAR(255),
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
+        ///////////////////////////////// Create the "saflitavezat" table///////////////////////////////////////////
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS saflitavezat (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        image VARCHAR(255),
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+      );
+    `);
     
     console.log("All tables created successfully.");
     return new Response("All tables created successfully", { status: 200 });

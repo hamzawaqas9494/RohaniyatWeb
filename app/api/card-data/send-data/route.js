@@ -1,6 +1,6 @@
 import { writeFile } from "fs/promises";
 import { join } from "path";
-import pool from "../../../../lib/db"; 
+import pool from "../../../../lib/db";
 export async function POST(req) {
   try {
     const formData = await req.formData();
@@ -25,6 +25,13 @@ export async function POST(req) {
       "rohaniilaaj",
       "tawizatusmaniya",
       "rohanidokan",
+      "nooriaamal",
+      "noorialviaamal",
+      "ooliaallahkaamal",
+      "bamokalamal",
+      "khasulkhasammal",
+      "alviamal",
+      "saflitavezat",
     ];
     if (!allowedTables.includes(tableName)) {
       return new Response(JSON.stringify({ error: "Invalid table name" }), {
