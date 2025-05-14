@@ -11,6 +11,13 @@ const allowedTables = [
   "rohaniilaaj",
   "tawizatusmaniya",
   "rohanidokan",
+  "nooriaamal",
+  "noorialviaamal",
+  "ooliaallahkaamal",
+  "bamokalamal",
+  "khasulkhasammal",
+  "alviamal",
+  "saflitavezat",
 ];
 
 // Mapping English table names to Urdu
@@ -21,6 +28,13 @@ const tableNameMap = {
   "rohaniilaaj": "روحانی علاج",
   "tawizatusmaniya": "تعویذات عثمانیہ",
   "rohanidokan": "روحانی دکان",
+  "nooriaamal":"نوری اعمال",
+  "noorialviaamal":"نوری علوی اعمال",
+  "ooliaallahkaamal":"اولیاء اللہ کے اعمال",
+  "bamokalamal":"با موکل اعمال",
+  "khasulkhasammal":"خاص الخالص اعمال",
+  "alviamal":"علوی اعمال",
+  "saflitavezat":"سفلی تعویذات",
 };
 export default function Dashboard() {
   const [activeTable, setActiveTable] = useState("taweez"); // Default
@@ -93,12 +107,12 @@ export default function Dashboard() {
     <MainLayout>
       <div>
         {/* Cards for table selection */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-2 sm:gap-4 mb-2 md:mb-4 sm:text-xl font-urdu">
+        <div className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-12 gap-1 sm:gap-2 mb-2 md:mb-4 sm:text-xl font-urdu">
         {allowedTables.map((table) => (
             <div
               key={table}
               onClick={() => handleTableChange(table)}
-              className={`cursor-pointer h-16 sm:h-20 md:h-24 flex items-center justify-center rounded-md transition-all duration-300 font-semibold  ${
+              className={`cursor-pointer h-12 sm:h-14 md:h-16 flex items-center justify-center rounded-md transition-all duration-300 font-semibold  ${
                 activeTable === table
                   ? "bg-[#6C472D] text-white"
                   : "bg-white text-[#6C472D] border-2 border-[#D4AF37]"
@@ -131,7 +145,7 @@ export default function Dashboard() {
               ) : data.length > 0 ? (
                 data.map((item) => (
                   <tr key={item.id}>
-                    <td className="sm:px-4 py-2 text-center">{item.id}</td>
+                    <td className="sm:px-4 py-2 text-center text-black">{item.id}</td>
                     <td className="sm:px-4 py-2 text-center font-urdu">
                     {item.title
                         ? item.title
