@@ -32,7 +32,7 @@ const tableNameMap = {
   "noorialviaamal":"نوری علوی اعمال",
   "ooliaallahkaamal":"اولیاء اللہ کے اعمال",
   "bamokalamal":"با موکل اعمال",
-  "khasulkhasammal":"خاص الخالص اعمال",
+  "khasulkhasammal":"خاص الخاص اعمال",
   "alviamal":"علوی اعمال",
   "saflitavezat":"سفلی تعویذات",
 };
@@ -107,7 +107,7 @@ export default function Dashboard() {
     <MainLayout>
       <div>
         {/* Cards for table selection */}
-        <div className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-12 gap-1 sm:gap-2 mb-2 md:mb-4 sm:text-xl font-urdu">
+        <div className="grid grid-cols-3 sm:grid-cols-7 gap-1 sm:gap-2 mb-2 md:mb-4 sm:text-lg font-urdu">
         {allowedTables.map((table) => (
             <div
               key={table}
