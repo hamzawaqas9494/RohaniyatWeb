@@ -24,7 +24,7 @@ const allowedTables = [
 const tableNameMap = {
   "taweez": "تعویذ",
   "wazaif": "وظائف",
-  "qutb": "قطب",
+  "qutb": "کتب",
   "rohaniilaaj": "روحانی علاج",
   "tawizatusmaniya": "تعویذات عثمانیہ",
   "rohanidokan": "روحانی دکان",
