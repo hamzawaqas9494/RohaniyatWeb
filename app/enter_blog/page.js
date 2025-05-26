@@ -85,7 +85,7 @@ export default function BlogForm() {
       const id = searchParams.get("id");
       const queryTable = searchParams.get("tableName");
       setId(id || "");
-      setTableName(queryTable|| "");
+      setTableName(queryTable || "");
     }
   }, [id]);
   useEffect(() => {
@@ -164,13 +164,13 @@ export default function BlogForm() {
         <div className="col-span-12 md:col-span-3">
           <select
             value={tableName || ""}
-            onChange={(e) => setTableName(e.target.value)} 
+            onChange={(e) => setTableName(e.target.value)}
             className="p-2 w-full text-[#6C472D] text-right text-xl font-urdu font-semibold border-2 border-[#6C472D] rounded-md bg-white outline-none"
           >
             <option value="">ٹیبل منتخب کریں</option>
             <option value="taweez">تعویذ</option>
             <option value="wazaif">وظائف</option>
-            <option value="qutb">قطب</option>
+            <option value="qutb">کتب</option>
             <option value="rohaniilaaj">روحانی علاج</option>
             <option value="tawizatusmaniya">تعویزات عثمانیہ</option>
             <option value="rohanidokan">روحانی دکان</option>
@@ -210,10 +210,10 @@ export default function BlogForm() {
           />
         </div>
         <div className="col-span-12">
-          <div className="px-2 py-3 border-2 border-[#D4AF37] w-full rounded-md bg-white ">
+          <div className="px-2 py-3 border-2 border-[#D4AF37] w-full rounded-md bg-white">
             {editor && renderToolbar(editor)}
             <div
-              className="mt-3 border-2 border-[#D4AF37] text-xl rounded-md text-right font-urdu"
+              className="mt-3 border-2 border-[#D4AF37] text-xl rounded-md text-right font-urdu overflow-y-auto max-h-96"
               dir="rtl"
             >
               <EditorContent editor={editor} />
