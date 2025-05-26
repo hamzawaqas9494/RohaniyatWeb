@@ -1,45 +1,7 @@
 "use client";
 
-<<<<<<< HEAD
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-=======
-// Mapping English table names to Urdu
-const tableNameMap = {
-  "taweez": "تعویذ",
-  "wazaif": "وظائف",
-  "qutb": "کتب",
-  "rohaniilaaj": "روحانی علاج",
-  "tawizatusmaniya": "تعویذات عثمانیہ",
-  "rohanidokan": "روحانی دکان",
-  "nooriaamal":"نوری اعمال",
-  "noorialviaamal":"نوری علوی اعمال",
-  "ooliaallahkaamal":"اولیاء اللہ کے اعمال",
-  "bamokalamal":"با موکل اعمال",
-  "khasulkhasammal":"خاص الخاص اعمال",
-  "alviamal":"علوی اعمال",
-  "saflitavezat":"سفلی تعویذات",
-};
-export default function Dashboard() {
-  const [activeTable, setActiveTable] = useState("taweez"); // Default
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    setLoading(true);
-    /////////////////////////////////////////////////////////get table data on base of selected table//////////////////////////////////////////////
-    fetch(`/api/card-data/get-table-data?tableName=${activeTable}`)
-      .then((res) => res.json())
-      .then((result) => {
-        console.log("Result:", result);
-        setData(result.rows); // Set all data at once
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Fetch error:", err);
-        setLoading(false);
-      });
-  }, [activeTable]);
->>>>>>> 6852fa814eafa25fc78fe52beb4162cc109eacfd
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
