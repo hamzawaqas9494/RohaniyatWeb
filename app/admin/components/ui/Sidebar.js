@@ -7,7 +7,7 @@ import { LayoutDashboard, Keyboard } from "lucide-react";
 const sideNavigation = [
   {
     name: "Dashboard",
-    href: "/",
+    href: "/dashboard",
     icon: LayoutDashboard, // just component reference
   },
   {

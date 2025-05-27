@@ -1,6 +1,6 @@
-"use client";
+'use client';
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Bold from "@tiptap/extension-bold";
@@ -18,7 +18,10 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { motion } from "framer-motion";
 import MainLayout from "../admin/components/ui/MainLayout";
 import "../globals.css";
+
+
 export default function BlogForm() {
+  
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
   const [content, setContent] = useState("");
@@ -26,6 +29,7 @@ export default function BlogForm() {
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [id, setId] = useState("");
+  
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -44,7 +48,27 @@ export default function BlogForm() {
     ],
     content: "",
     onUpdate: ({ editor }) => setContent(editor.getHTML()),
+    immediatelyRender: false,
   });
+  const formatButtons = [
+    { action: "toggleBold", label: "B", style: "font-bold" },
+    { action: "toggleItalic", label: "I", style: "italic" },
+    { action: "toggleUnderline", label: "U", style: "underline" },
+    { action: "toggleStrike", label: "S", style: "line-through" },
+    { action: "toggleHighlight", label: "✦ Highlight", style: "bg-yellow-300" },
+    { action: "undo", label: "↩ Undo", style: "text-blue-500" },
+    { action: "redo", label: "↪ Redo", style: "text-green-500" },
+    { action: "clearContent", label: "🗑 Clear", style: "text-red-500" },
+  ];
+    const router = useRouter();
+  // Check user login
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("loggedIn");
+    if (!loggedIn) {
+      router.push("/");
+    }
+  }, [router]);
+
   const handleAction = (editor, action) => {
     if (action === "clearContent") {
       editor.commands.clearContent();
@@ -57,16 +81,7 @@ export default function BlogForm() {
       }
     }
   };
-  const formatButtons = [
-    { action: "toggleBold", label: "B", style: "font-bold" },
-    { action: "toggleItalic", label: "I", style: "italic" },
-    { action: "toggleUnderline", label: "U", style: "underline" },
-    { action: "toggleStrike", label: "S", style: "line-through" },
-    { action: "toggleHighlight", label: "✦ Highlight", style: "bg-yellow-300" },
-    { action: "undo", label: "↩ Undo", style: "text-blue-500" },
-    { action: "redo", label: "↪ Redo", style: "text-green-500" },
-    { action: "clearContent", label: "🗑 Clear", style: "text-red-500" },
-  ];
+
   const showMessage = (message) => {
     setModalMessage(message);
     setShowModal(true);
@@ -79,6 +94,7 @@ export default function BlogForm() {
     setTableName("");
     if (editor) editor.commands.clearContent();
   };
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       const searchParams = new URLSearchParams(window.location.search);
@@ -87,30 +103,40 @@ export default function BlogForm() {
       setId(id || "");
       setTableName(queryTable || "");
     }
-  }, [id]);
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!id || !tableName) return;
-      try {
-        ///////////////////////////////////////////////////update data on the base of id////////////////////////////////
-        const res = await fetch(
-          `/api/card-data/update-data?id=${id}&tableName=${tableName}`
-        );
-        const data = await res.json();
-        console.log(data, "update data");
-        setTitle(data.title || "");
-        setContent(data.content || "");
-        setImage(data.image || null);
-        setTableName(tableName);
-        if (editor && data.content) {
-          editor.commands.setContent(data.content);
-        }
-      } catch (err) {
-        showMessage("❌ Failed to load blog data.");
+  }, []);
+
+  ///////////////////////////////////////////////////update data on the base of id////////////////////////////////
+ useEffect(() => {
+  const fetchData = async () => {
+    if (!id || !tableName || !editor) return;
+
+    try {
+      console.log(id, tableName, "hamza waqas");
+      const res = await fetch(
+        `/api/card-data/update-data?id=${id}&tableName=${tableName}`
+      );
+      const data = await res.json();
+
+      setTitle(data.title || "");
+      setContent(data.content || "");
+      setImage(data.image || null);
+      setTableName(tableName);
+
+      // ✅ Only set content if editor exists and content is non-empty
+      if (data.content) {
+        editor.commands.setContent(data.content);
       }
-    };
-    fetchData();
-  }, [id, tableName, editor]);
+    } catch (err) {
+      showMessage("❌ Failed to load blog data.");
+    }
+  };
+
+  fetchData();
+}, [id, tableName, editor]);
+
+
+
+      /////////////////////////////////////send data to the database through editor////////////////////////////////////////
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !content || !tableName) {
@@ -127,9 +153,7 @@ export default function BlogForm() {
     formData.append("content", content);
     formData.append("tableName", tableName);
     if (id) formData.append("id", id);
-    console.log(formData, "formData");
     try {
-      /////////////////////////////////////send data to the database through editor////////////////////////////////////////
       const response = await fetch("/api/card-data/send-data", {
         method: "POST",
         body: formData,
@@ -137,13 +161,22 @@ export default function BlogForm() {
       if (response.ok) {
         showMessage(`✅ Blog ${id ? "updated" : "submitted"} successfully!`);
         clearForm();
+        setId("");
+    // Remove query params from URL after using them
+      const newUrl = window.location.pathname;
+      router.replace(newUrl, undefined, { shallow: true });
       } else {
         showMessage("❌ Blog submission failed!");
       }
+  
+          
     } catch (err) {
       showMessage("❌ Something went wrong!");
     }
+
   };
+
+  // eiditor
   const renderToolbar = (editor) => (
     <div className="flex gap-2 flex-wrap">
       {formatButtons.map(({ action, label, style }) => (
@@ -161,7 +194,7 @@ export default function BlogForm() {
   return (
     <MainLayout>
       <form onSubmit={handleSubmit} className="w-full grid grid-cols-12 gap-4">
-        <div className="col-span-12 md:col-span-3">
+        <div className="col-span-12 md:col-span-3 max-h-[150px] overflow-y-auto">
           <select
             value={tableName || ""}
             onChange={(e) => setTableName(e.target.value)}
@@ -224,7 +257,7 @@ export default function BlogForm() {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="py-3 px-10 text-white text-lg font-semibold bg-[#6C472D] rounded-md"
+              className="py-3 px-10 text-white text-lg font-semibold bg-[#6C472D] rounded-md cursor-pointer"
             >
               {id ? "Update" : "Post"}
             </button>

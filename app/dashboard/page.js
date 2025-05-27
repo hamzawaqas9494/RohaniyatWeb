@@ -1,11 +1,9 @@
-
-
 "use client";
 import MainLayout from "../admin/components/ui/MainLayout";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
+
 const allowedTables = [
   "taweez",
   "wazaif",
@@ -22,126 +20,158 @@ const allowedTables = [
   "saflitavezat",
 ];
 
-// Mapping English table names to Urdu
 const tableNameMap = {
-  "taweez": "تعویذ",
-  "wazaif": "وظائف",
-  "qutb": "قطب",
-  "rohaniilaaj": "روحانی علاج",
-  "tawizatusmaniya": "تعویذات عثمانیہ",
-  "rohanidokan": "روحانی دکان",
-  "nooriaamal":"نوری اعمال",
-  "noorialviaamal":"نوری علوی اعمال",
-  "ooliaallahkaamal":"اولیاء اللہ کے اعمال",
-  "bamokalamal":"با موکل اعمال",
-  "khasulkhasammal":"خاص الخاص اعمال",
-  "alviamal":"علوی اعمال",
-  "saflitavezat":"سفلی تعویذات",
+  taweez: "تعویذ",
+  wazaif: "وظائف",
+  qutb: "قطب",
+  rohaniilaaj: "روحانی علاج",
+  tawizatusmaniya: "تعویذات عثمانیہ",
+  rohanidokan: "روحانی دکان",
+  nooriaamal: "نوری اعمال",
+  noorialviaamal: "نوری علوی اعمال",
+  ooliaallahkaamal: "اولیاء اللہ کے اعمال",
+  bamokalamal: "با موکل اعمال",
+  khasulkhasammal: "خاص الخاص اعمال",
+  alviamal: "علوی اعمال",
+  saflitavezat: "سفلی تعویذات",
 };
+
 export default function Dashboard() {
-  const [activeTable, setActiveTable] = useState("taweez"); // Default
+  const [activeTable, setActiveTable] = useState("taweez");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [deleteStatus, setDeleteStatus] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const limit = 5;
+
+  const router = useRouter();
+
+  // Check user login
   useEffect(() => {
-    setLoading(true);
-    /////////////////////////////////////////////////////////get table data on base of selected table//////////////////////////////////////////////
-    fetch(`/api/card-data/get-table-data?tableName=${activeTable}`)
-      .then((res) => res.json())
-      .then((result) => {
-        console.log("Result:", result);
-        setData(result.rows); // Set all data at once
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Fetch error:", err);
-        setLoading(false);
-      });
-  }, [activeTable]);
-
-  /////////////////////////////////////////////////////////////////////////Handle table switch///////////////////////////////////////////////////////////
-  const handleTableChange = (table) => {
-    setActiveTable(table);
-  };
-
-  /////////////////////////////////////////////////////////////////////////Handle Delete Request///////////////////////////////////////////////////////////
-  const handleDelete = async (id) => {
-    console.log(id, activeTable);
-    if (confirm("Are you sure you want to delete this item?")) {
-      try {
-        const response = await fetch(
-          `/api/card-data/delete-data?tableName=${activeTable}&id=${id}`,
-          {
-            method: "DELETE",
-          }
-        );
-
-        if (response.ok) {
-          alert("Item deleted successfully");
-          fetchData();
-        } else {
-          const result = await response.json();
-          alert(`Failed to delete item: ${result.message || "Unknown error"}`);
-        }
-      } catch (error) {
-        console.error("Delete error:", error);
-        alert("Error deleting item");
-      }
+    const loggedIn = localStorage.getItem("loggedIn");
+    if (!loggedIn) {
+      router.push("/");
     }
-  };
+  }, [router]);
 
-  /////////////////////////////////////////////////////// Fetch data after table change////////////////////////////////////////////////
+  // Fetch data whenever active table or page changes
+  useEffect(() => {
+    fetchData();
+  }, [activeTable, page]);
+
+  // Fetch table data
   const fetchData = async () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `/api/card-data/get-table-data?tableName=${activeTable}`
+        `/api/card-data/get-table-data?tableName=${activeTable}&limit=${limit}&page=${page}`
       );
       const result = await res.json();
       setData(result.rows);
+      setTotalPages(Math.ceil(result.total / limit));
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
   };
-  console.log(data, "data get form database");
+
+  // Handle delete confirmation
+  const handleDeleteConfirm = async () => {
+    if (!deleteId) return;
+    try {
+      const response = await fetch(
+        `/api/card-data/delete-data?tableName=${activeTable}&id=${deleteId}`,
+        { method: "DELETE" }
+      );
+
+      if (response.ok) {
+        setDeleteStatus("Record deleted successfully.");
+        fetchData();
+      } else {
+        const result = await response.json();
+        setDeleteStatus(`Failed to delete: ${result.message || "Unknown error"}`);
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      setDeleteStatus("An error occurred while deleting.");
+    }
+
+    // Reset modal state
+    setShowModal(false);
+    setDeleteId(null);
+    setTimeout(() => setDeleteStatus(null), 3000);
+  };
+
+  // Handle cancel button in modal
+  const handleCancelDelete = () => {
+    setShowModal(false);
+    setDeleteId(null);
+  };
+
+  // Change selected table
+  const handleTableChange = (table) => {
+    setActiveTable(table);
+    setPage(1);
+  };
+
+  // Navigate to specific page
+  const goToPage = (num) => {
+    if (num >= 1 && num <= totalPages) {
+      setPage(num);
+    }
+  };
+
   return (
     <MainLayout>
-      <div>
-        {/* Cards for table selection */}
+    
+        {/* Table selection UI */}
         <div className="grid grid-cols-3 sm:grid-cols-7 gap-1 sm:gap-2 mb-2 md:mb-4 sm:text-lg font-urdu">
-        {allowedTables.map((table) => (
+          {allowedTables.map((table) => (
             <div
               key={table}
               onClick={() => handleTableChange(table)}
-              className={`cursor-pointer h-12 sm:h-14 md:h-16 flex items-center justify-center rounded-md transition-all duration-300 font-semibold  ${
+              className={`cursor-pointer h-12 sm:h-14 md:h-16 flex items-center justify-center rounded-md transition-all duration-300 font-semibold ${
                 activeTable === table
                   ? "bg-[#6C472D] text-white"
                   : "bg-white text-[#6C472D] border-2 border-[#D4AF37]"
               }`}
             >
-              {/* Display Urdu table name */}
-              {tableNameMap[table] || table} 
+              {tableNameMap[table] || table}
             </div>
           ))}
         </div>
-       {/* /////////////////////////////////////////////////////Table displaying data//////////////////////////////////////////////// */}
+
+    
+      {/* Status message after delete */}
+     {deleteStatus && (
+  <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-center items-center py-2 px-6 text-center text-white bg-[#6C472D] rounded-md">
+    {deleteStatus}
+  </div>
+)}
+
+    
+
+        {/* Table data display */}
         <div className="w-full overflow-x-auto sm:overflow-x-visible">
-          <table className="w-[600px] sm:w-full m-auto divide-y divide-gray-200 border-2 border-[#D4AF37] rounded-md text-direction-right" >
+          <table className="w-[600px] sm:w-full m-auto divide-y divide-gray-200 border-2 border-[#D4AF37] rounded-md text-direction-right">
             <thead className="bg-[#6C472D]">
               <tr>
-                <th className="w-1/5 py-3 font-semibold text-white font-urdu">نمبر شمار</th>
-                <th className="w-1/5 py-3 font-semibold text-white font-urdu">عنوان</th>
-                <th className="w-1/5 py-3 font-semibold text-white font-urdu">مواد</th>
-                <th className="w-1/5 py-3 font-semibold text-white font-urdu">تصویر</th>
-                <th className="w-1/5 py-3 font-semibold text-white font-urdu">ختم/تبدیل</th>
+                <th className="py-3 font-semibold text-white font-urdu">نمبر شمار</th>
+                <th className="py-3 font-semibold text-white font-urdu">عنوان</th>
+                <th className="py-3 font-semibold text-white font-urdu">مواد</th>
+                <th className="py-3 font-semibold text-white font-urdu">تصویر</th>
+                <th className="py-3 font-semibold text-white font-urdu">ختم/تبدیل</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
               {loading ? (
                 <tr>
                   <td colSpan={5} className="py-6 text-center font-urdu text-[#6C472D]">
-                  براہِ کرم انتظار کریں
+                    براہِ کرم انتظار کریں
                   </td>
                 </tr>
               ) : data.length > 0 ? (
@@ -149,19 +179,13 @@ export default function Dashboard() {
                   <tr key={item.id}>
                     <td className="sm:px-4 py-2 text-center text-black">{item.id}</td>
                     <td className="sm:px-4 py-2 text-center font-urdu">
-                    {item.title
-                        ? item.title
-                            .replace(/<[^>]+>/g, "") 
-                            .slice(0, 20) + "...." 
+                      {item.title
+                        ? item.title.replace(/<[^>]+>/g, "").slice(0, 20) + "...."
                         : "no data found"}
                     </td>
-                    <td
-                      className="sm:px-4 py-2 text-center text-direction-right font-urdu"
-                    >
+                    <td className="sm:px-4 py-2 text-center text-direction-right font-urdu">
                       {item.content
-                        ? item.content
-                            .replace(/<[^>]+>/g, "") 
-                            .slice(0, 20) + "...." 
+                        ? item.content.replace(/<[^>]+>/g, "").slice(0, 20) + "...."
                         : "no data found"}
                     </td>
                     <td className="py-2 sm:px-4 flex items-center justify-center">
@@ -184,13 +208,17 @@ export default function Dashboard() {
                           query: { id: item.id, tableName: activeTable },
                         }}
                       >
-                        <button className="px-4 py-2 ml-2 bg-blue-600 text-white rounded-md font-urdu ">
-                        تبدیل
+                        <button className="ml-1 px-4 py-2 bg-[#6C472D] text-white rounded-md font-urdu cursor-pointer">
+                          تبدیل
                         </button>
                       </Link>
                       <button
-                        onClick={() => handleDelete(item.id)}
-                        className="px-4 py-2 bg-red-500 text-white rounded-md font-urdu"
+                        onClick={() => {
+                          // Open modal and store ID to delete
+                          setShowModal(true);
+                          setDeleteId(item.id);
+                        }}
+                        className="mr-1 px-4 py-2 bg-[#6C472D] text-white rounded-md font-urdu cursor-pointer"
                       >
                         ختم
                       </button>
@@ -210,7 +238,74 @@ export default function Dashboard() {
             </tbody>
           </table>
         </div>
-      </div>
+
+        {/* Pagination buttons */}
+        <div className="flex justify-center items-center mt-4 space-x-2 font-urdu">
+          <button
+            onClick={() => goToPage(page - 1)}
+            disabled={page === 1}
+            className={`px-4 py-2 rounded-md ${
+              page === 1
+                ? "bg-[#6C472D] text-white rounded-md font-medium cursor-not-allowed"
+                : "bg-[#6C472D] text-white rounded-md font-medium cursor-pointer"
+            }`}
+          >
+            Previous
+          </button>
+
+          {[...Array(totalPages)].map((_, idx) => {
+            const pageNum = idx + 1;
+            return (
+              <button
+                key={pageNum}
+                onClick={() => goToPage(pageNum)}
+                  className={`px-4 py-2 rounded-md ${
+                  page === pageNum
+                    ? "bg-[#6C472D] text-white rounded-md cursor-pointer"
+                    : "bg-white border border-[#6C472D] cursor-pointer text-[#6C472D]"
+                }`}
+              >
+                {pageNum}
+              </button>
+            );
+          })}
+
+          <button
+            onClick={() => goToPage(page + 1)}
+            disabled={page === totalPages}
+            className={`px-4 py-2 rounded-md ${
+              page === totalPages
+                ? "bg-[#6C472D] text-white rounded-md font-medium cursor-not-allowed"
+                : "bg-[#6C472D] text-white hover:bg-[#5a3f24] cursor-pointer"
+            }`}
+          >
+            Next
+          </button>
+        </div>
+
+        {/* Delete confirmation modal */}
+        {showModal && (
+     <div className="fixed inset-0 bg-black/50  flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center w-[90%] sm:w-96">
+              <h2 className="text-lg font-semibold mb-4 font-urdu">کیا آپ واقعی اس ریکارڈ کو ختم کرنا چاہتے ہیں؟</h2>
+              <div className="flex justify-center space-x-4 mt-4">
+                <button
+                  onClick={handleCancelDelete}
+                  className="px-4 py-2 bg-[#6C472D] text-white rounded-md"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteConfirm}
+                  className="px-4 py-2 bg-[#6C472D] text-white rounded-md"
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+    
     </MainLayout>
   );
 }

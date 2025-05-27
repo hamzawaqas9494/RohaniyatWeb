@@ -1,7 +1,7 @@
 import pool from "../../../../lib/db";
 export const dynamic = "force-dynamic";
 export async function DELETE(req) {
-  const { searchParams } = new URL(req.url); // Correct way to parse query params
+  const { searchParams } = new URL(req.url);
   const tableName = searchParams.get("tableName");
   const id = searchParams.get("id");
   if (!tableName || !id) {
@@ -13,7 +13,6 @@ export async function DELETE(req) {
     );
   }
   try {
-    // Construct dynamic SQL query based on tableName
     const query = `DELETE FROM ${tableName} WHERE id = $1 RETURNING *`;
     const result = await pool.query(query, [id]);
     if (result.rowCount > 0) {
