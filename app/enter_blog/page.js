@@ -109,9 +109,7 @@ export default function BlogForm() {
  useEffect(() => {
   const fetchData = async () => {
     if (!id || !tableName || !editor) return;
-
     try {
-      console.log(id, tableName, "hamza waqas");
       const res = await fetch(
         `/api/card-data/update-data?id=${id}&tableName=${tableName}`
       );
@@ -246,7 +244,7 @@ export default function BlogForm() {
           <div className="px-2 py-3 border-2 border-[#D4AF37] w-full rounded-md bg-white">
             {editor && renderToolbar(editor)}
             <div
-              className="mt-3 border-2 border-[#D4AF37] text-xl rounded-md text-right font-urdu overflow-y-auto max-h-96"
+              className="mt-3 border-2 border-[#D4AF37] text-xl rounded-md text-right overflow-y-auto max-h-96"
               dir="rtl"
             >
               <EditorContent editor={editor} />

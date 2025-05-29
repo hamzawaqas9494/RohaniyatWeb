@@ -7,9 +7,10 @@
     "build": "next build",
     "start": "next start -p $PORT",
     "lint": "next lint"
-   
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^41.4.2",
+    "@ckeditor/ckeditor5-react": "^9.5.0",
     "@headlessui/react": "^2.2.1",
     "@tiptap/extension-bullet-list": "^2.11.5",
     "@tiptap/extension-highlight": "^2.11.5",
@@ -46,6 +47,7 @@
     "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.2.1",
+    "expo-cli": "^6.3.12",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.7"
   }
