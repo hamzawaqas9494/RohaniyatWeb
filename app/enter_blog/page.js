@@ -18,10 +18,7 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { motion } from "framer-motion";
 import MainLayout from "../admin/components/ui/MainLayout";
 import "../globals.css";
-
-
 export default function BlogForm() {
-  
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
   const [content, setContent] = useState("");
@@ -51,15 +48,17 @@ export default function BlogForm() {
     immediatelyRender: false,
   });
   const formatButtons = [
-    { action: "toggleBold", label: "B", style: "font-bold" },
-    { action: "toggleItalic", label: "I", style: "italic" },
-    { action: "toggleUnderline", label: "U", style: "underline" },
-    { action: "toggleStrike", label: "S", style: "line-through" },
-    { action: "toggleHighlight", label: "✦ Highlight", style: "bg-yellow-300" },
-    { action: "undo", label: "↩ Undo", style: "text-blue-500" },
-    { action: "redo", label: "↪ Redo", style: "text-green-500" },
-    { action: "clearContent", label: "🗑 Clear", style: "text-red-500" },
-  ];
+  { action: "toggleBold", label: "B", style: "font-bold" },
+  { action: "toggleItalic", label: "I", style: "italic" },
+  { action: "toggleUnderline", label: "U", style: "underline" },
+  { action: "toggleStrike", label: "S", style: "line-through" },
+  { action: "toggleHighlight", label: "✦ Highlight", style: "bg-yellow-300" },
+  { action: "toggleBulletList", label: "• List", style: "text-black bg-gray-200" },
+  { action: "toggleOrderedList", label: "1. List", style: "text-black bg-gray-200" },
+  { action: "undo", label: "↩ Undo", style: "text-blue-500" },
+  { action: "redo", label: "↪ Redo", style: "text-green-500" },
+  { action: "clearContent", label: "🗑 Clear", style: "text-red-500" },
+];
     const router = useRouter();
   // Check user login
   useEffect(() => {
@@ -69,19 +68,20 @@ export default function BlogForm() {
     }
   }, [router]);
 
-  const handleAction = (editor, action) => {
-    if (action === "clearContent") {
-      editor.commands.clearContent();
-    } else {
-      editor.chain().focus();
-      if (action === "toggleBulletList" || action === "toggleOrderedList") {
-        editor.chain().focus()[action]().run();
-      } else {
-        editor.chain()[action]().run();
-      }
-    }
-  };
+ const handleAction = (editor, action) => {
+  if (!editor) return;
 
+  if (action === "clearContent") {
+    editor.commands.clearContent();
+  } else {
+    const chain = editor.chain().focus();
+    if (action === "toggleBulletList" || action === "toggleOrderedList") {
+      chain[action]().run();
+    } else {
+      chain[action]().run();
+    }
+  }
+};
   const showMessage = (message) => {
     setModalMessage(message);
     setShowModal(true);
