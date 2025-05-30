@@ -26,6 +26,8 @@ export default function BlogForm() {
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [id, setId] = useState("");
+    const [activeButtons, setActiveButtons] = useState([]); // 🆕 New state
+
   
   const editor = useEditor({
     extensions: [
@@ -47,18 +49,25 @@ export default function BlogForm() {
     onUpdate: ({ editor }) => setContent(editor.getHTML()),
     immediatelyRender: false,
   });
-  const formatButtons = [
-  { action: "toggleBold", label: "B", style: "font-bold" },
-  { action: "toggleItalic", label: "I", style: "italic" },
-  { action: "toggleUnderline", label: "U", style: "underline" },
-  { action: "toggleStrike", label: "S", style: "line-through" },
-  { action: "toggleHighlight", label: "✦ Highlight", style: "bg-yellow-300" },
-  { action: "toggleBulletList", label: "• List", style: "text-black bg-gray-200" },
-  { action: "toggleOrderedList", label: "1. List", style: "text-black bg-gray-200" },
-  { action: "undo", label: "↩ Undo", style: "text-blue-500" },
-  { action: "redo", label: "↪ Redo", style: "text-green-500" },
-  { action: "clearContent", label: "🗑 Clear", style: "text-red-500" },
-];
+const formatButtons = [
+    { action: "toggleBold", label: "Bold", style: "text-black font-bold" },
+    { action: "toggleItalic", label: "Italic", style: "italic" },
+    { action: "toggleUnderline", label: "Underline", style: "underline" },
+    { action: "toggleStrike", label: "Line-through", style: "line-through" },
+    { action: "toggleHighlight", label: "✦Highlight", style: "" },
+    
+    { action: "setHeading", level: 1, label: "H1", style: "text-lg font-bold" },
+  { action: "setHeading", level: 2, label: "H2", style: "text-base font-semibold" },
+  { action: "setHeading", level: 3, label: "H3", style: "text-sm font-medium" },
+  { action: "setHeading", level: 4, label: "H4", style: "text-xs font-medium" },
+  { action: "setHeading", level: 5, label: "H5", style: "text-[10px] font-medium" },
+  { action: "setHeading", level: 6, label: "H6", style: "text-[8px] font-medium" },
+    { action: "toggleBulletList", label: "☰", style: "text-xl" },
+    { action: "toggleOrderedList", label: "🔢", style: "text-xl" },
+    { action: "undo", label: "↩Undo", style: "text-blue-500" },
+    { action: "redo", label: "↪Redo", style: "text-green-500" },
+    { action: "clearContent", label: "🗑Clear", style: "text-red-500" },
+  ];
     const router = useRouter();
   // Check user login
   useEffect(() => {
@@ -68,20 +77,29 @@ export default function BlogForm() {
     }
   }, [router]);
 
- const handleAction = (editor, action) => {
+const handleAction = (editor, action, level = null) => {
   if (!editor) return;
-
-  if (action === "clearContent") {
-    editor.commands.clearContent();
-  } else {
-    const chain = editor.chain().focus();
-    if (action === "toggleBulletList" || action === "toggleOrderedList") {
-      chain[action]().run();
-    } else {
-      chain[action]().run();
+ if (action === "clearContent") {
+      editor.commands.clearContent();
+      setActiveButtons([]);
+      return;
     }
-  }
-};
+
+    if (action === "setHeading" && level) {
+      editor.chain().focus().setHeading({ level }).run();
+      setActiveButtons((prev) => [...prev.filter(b => !b.startsWith("setHeading")), `${action}-${level}`]);
+      return;
+    }
+    editor.chain().focus()[action]().run();
+   // Toggle button in activeButtons
+    const key = level ? `${action}-${level}` : action;
+    setActiveButtons((prev) =>
+      prev.includes(key)
+        ? prev.filter((item) => item !== key)
+        : [...prev, key]
+    );
+  };
+
   const showMessage = (message) => {
     setModalMessage(message);
     setShowModal(true);
@@ -135,14 +153,14 @@ export default function BlogForm() {
 
 
       /////////////////////////////////////send data to the database through editor////////////////////////////////////////
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !content || !tableName) {
-      const missingFields = [];
-      if (!title) missingFields.push("Title");
-      if (!content) missingFields.push("Content");
-      if (!tableName) missingFields.push("Table Name");
-      showMessage(`⚠ Missing field(s): ${missingFields.join(", ")}`);
+      const missing = [];
+      if (!title) missing.push("Title");
+      if (!content) missing.push("Content");
+      if (!tableName) missing.push("Table Name");
+      showMessage(`⚠ Missing field(s): ${missing.join(", ")}`);
       return;
     }
     const formData = new FormData();
@@ -177,16 +195,24 @@ export default function BlogForm() {
   // eiditor
   const renderToolbar = (editor) => (
     <div className="flex gap-2 flex-wrap">
-      {formatButtons.map(({ action, label, style }) => (
-        <button
-          key={action}
-          type="button"
-          onClick={() => handleAction(editor, action)}
-          className={`p-2 rounded-md text-sm ${style} bg-gray-300 hover:bg-gray-400 transition`}
-        >
-          {label}
-        </button>
-      ))}
+      {formatButtons.map(({ action, label, style, level }) => {
+        const key = level ? `${action}-${level}` : action;
+        const isActive = activeButtons.includes(key);
+        return (
+          <button
+            key={key}
+            type="button"
+            onClick={() => handleAction(editor, action, level)}
+            className={`p-2 rounded-md text-sm transition border 
+              ${style} 
+              ${isActive ? "bg-yellow-800 text-white" : "bg-gray-200 hover:bg-gray-300"}
+            `}
+          >
+            {label}
+          </button>
+        );
+      })}
+
     </div>
   );
   return (

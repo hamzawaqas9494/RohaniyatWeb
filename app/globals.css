@@ -31,7 +31,10 @@ body {
 }
 .font-urdu {
   font-family: 'UrduFont', serif;
+  white-space: pre-wrap;
+  word-spacing: 0.2em;
 }
+
 .text-direction-right {
   direction: rtl;
 }
@@ -71,3 +74,71 @@ body {
   color: #6c472d;
   font-weight: bold;
 }
+/* TipTap default styles for content formatting */
+
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+.ProseMirror h4 {
+  font-size: 1.125rem;
+  font-weight: bold;
+}
+.ProseMirror h5 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.ProseMirror h6 {
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+.ProseMirror strong {
+  font-weight: bold;
+}
+.ProseMirror em {
+  font-style: italic;
+}
+.ProseMirror u {
+  text-decoration: underline;
+}
+.ProseMirror s {
+  text-decoration: line-through;
+}
+.ProseMirror blockquote {
+  border-left: 4px solid #ccc;
+  padding-left: 1rem;
+  color: #666;
+  font-style: italic;
+}
+.ProseMirror code {
+  background-color: #f5f5f5;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
+.ProseMirror ul,
+.ProseMirror ol {
+  list-style-type: inherit !important;
+  padding-left: 1.5rem !important;
+  margin-left: 1.5rem !important;
+  display: block !important;
+}
+
+.ProseMirror ul li,
+.ProseMirror ol li {
+  display: list-item !important;
+}
+.ProseMirror :where(ul, ol) {
+  list-style-type: revert !important;
+  padding-left: 1.5rem !important;
+  margin-left: 1.5rem !important;
+}
+
