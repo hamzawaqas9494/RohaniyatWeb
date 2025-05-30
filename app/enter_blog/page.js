@@ -15,8 +15,28 @@ import Highlight from "@tiptap/extension-highlight";
 import Blockquote from "@tiptap/extension-blockquote";
 import CodeBlock from "@tiptap/extension-code-block";
 import Placeholder from "@tiptap/extension-placeholder";
+import Heading from "@tiptap/extension-heading";
 import { motion } from "framer-motion";
 import MainLayout from "../admin/components/ui/MainLayout";
+import {
+  Bold as BoldIcon,
+  Italic as ItalicIcon,
+  Underline as UnderlineIcon,
+  Strikethrough,
+  Highlighter,
+  Heading1,
+  Heading2,
+  Heading3,
+  Heading4,
+  Heading5,
+  Heading6,
+  List,
+  ListOrdered,
+  Undo2,
+  Redo2,
+  Trash2
+} from "lucide-react";
+
 import "../globals.css";
 export default function BlogForm() {
   const [title, setTitle] = useState("");
@@ -26,9 +46,8 @@ export default function BlogForm() {
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [id, setId] = useState("");
-    const [activeButtons, setActiveButtons] = useState([]); // 🆕 New state
+  const [activeButtons, setActiveButtons] = useState([]); // 🆕 New state
 
-  
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -50,24 +69,24 @@ export default function BlogForm() {
     immediatelyRender: false,
   });
 const formatButtons = [
-    { action: "toggleBold", label: "Bold", style: "text-black font-bold" },
-    { action: "toggleItalic", label: "Italic", style: "italic" },
-    { action: "toggleUnderline", label: "Underline", style: "underline" },
-    { action: "toggleStrike", label: "Line-through", style: "line-through" },
-    { action: "toggleHighlight", label: "✦Highlight", style: "" },
-    
-    { action: "setHeading", level: 1, label: "H1", style: "text-lg font-bold" },
-  { action: "setHeading", level: 2, label: "H2", style: "text-base font-semibold" },
-  { action: "setHeading", level: 3, label: "H3", style: "text-sm font-medium" },
-  { action: "setHeading", level: 4, label: "H4", style: "text-xs font-medium" },
-  { action: "setHeading", level: 5, label: "H5", style: "text-[10px] font-medium" },
-  { action: "setHeading", level: 6, label: "H6", style: "text-[8px] font-medium" },
-    { action: "toggleBulletList", label: "☰", style: "text-xl" },
-    { action: "toggleOrderedList", label: "🔢", style: "text-xl" },
-    { action: "undo", label: "↩Undo", style: "text-blue-500" },
-    { action: "redo", label: "↪Redo", style: "text-green-500" },
-    { action: "clearContent", label: "🗑Clear", style: "text-red-500" },
-  ];
+  { action: "toggleBold", icon: <BoldIcon size={16} />, label: "Bold" },
+  { action: "toggleItalic", icon: <ItalicIcon size={16} />, label: "Italic" },
+  { action: "toggleUnderline", icon: <UnderlineIcon size={16} />, label: "Underline" },
+  { action: "toggleStrike", icon: <Strikethrough size={16} />, label: "Strike" },
+  { action: "toggleHighlight", icon: <Highlighter size={16} />, label: "Highlight" },
+  { action: "setHeading", level: 1, icon: <Heading1 size={16} />, label: "" },
+  { action: "setHeading", level: 2, icon: <Heading2 size={16} />, label: "" },
+  { action: "setHeading", level: 3, icon: <Heading3 size={16} />, label: "" },
+  { action: "setHeading", level: 4, icon: <Heading4 size={16} />, label: "" },
+  { action: "setHeading", level: 5, icon: <Heading5 size={16} />, label: "" },
+  { action: "setHeading", level: 6, icon: <Heading6 size={16} />, label: "" },
+  { action: "toggleBulletList", icon: <List size={16} />, label: "" },
+  { action: "toggleOrderedList", icon: <ListOrdered size={16} />, label: "" },
+  { action: "undo", icon: <Undo2 size={16} />, label: "Undo" },
+  { action: "redo", icon: <Redo2 size={16} />, label: "Redo" },
+  { action: "clearContent", icon: <Trash2 size={16} />, label: "Clear" },
+];
+
     const router = useRouter();
   // Check user login
   useEffect(() => {
@@ -179,6 +198,7 @@ const handleAction = (editor, action, level = null) => {
       if (response.ok) {
         showMessage(`✅ Blog ${id ? "updated" : "submitted"} successfully!`);
         clearForm();
+        setActiveButtons([]); 
         setId("");
     // Remove query params from URL after using them
       const newUrl = window.location.pathname;
@@ -197,23 +217,25 @@ const handleAction = (editor, action, level = null) => {
   // eiditor
   const renderToolbar = (editor) => (
     <div className="flex gap-2 flex-wrap">
-      {formatButtons.map(({ action, label, style, level }) => {
-        const key = level ? `${action}-${level}` : action;
-        const isActive = activeButtons.includes(key);
-        return (
-          <button
-            key={key}
-            type="button"
-            onClick={() => handleAction(editor, action, level)}
-            className={`p-2 rounded-md text-sm transition border 
-              ${style} 
-              ${isActive ? "bg-yellow-800 text-white" : "bg-gray-200 hover:bg-gray-300"}
-            `}
-          >
-            {label}
-          </button>
-        );
-      })}
+    {formatButtons.map(({ action, label, icon, level }) => {
+  const key = level ? `${action}-${level}` : action;
+  const isActive = activeButtons.includes(key);
+  return (
+    <button
+      key={key}
+      type="button"
+      onClick={() => handleAction(editor, action, level)}
+      className={`p-2 flex items-center rounded-md text-sm transition border-2 border-[#6C472D]
+        ${isActive ? "bg-[#6C472D] text-white" : "bg-[#EFEADF] hover:bg-gray-300 text-[#6C472D]"}
+      `}
+    >
+      {icon}
+      <span>{label}</span>
+    </button>
+  );
+})}
+
+
 
     </div>
   );
