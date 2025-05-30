@@ -46,7 +46,6 @@ export default function BlogForm() {
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [id, setId] = useState("");
-  const [activeButtons, setActiveButtons] = useState([]); // 🆕 New state
 
   const editor = useEditor({
     extensions: [
@@ -98,26 +97,19 @@ const formatButtons = [
 
 const handleAction = (editor, action, level = null) => {
   if (!editor) return;
- if (action === "clearContent") {
-      editor.commands.clearContent();
-      setActiveButtons([]);
-      return;
-    }
 
-    if (action === "setHeading" && level) {
-      editor.chain().focus().setHeading({ level }).run();
-      setActiveButtons((prev) => [...prev.filter(b => !b.startsWith("setHeading")), `${action}-${level}`]);
-      return;
-    }
-    editor.chain().focus()[action]().run();
-   // Toggle button in activeButtons
-    const key = level ? `${action}-${level}` : action;
-    setActiveButtons((prev) =>
-      prev.includes(key)
-        ? prev.filter((item) => item !== key)
-        : [...prev, key]
-    );
-  };
+  if (action === "clearContent") {
+    editor.commands.clearContent();
+    return;
+  }
+
+  if (action === "setHeading" && level) {
+    editor.chain().focus().setHeading({ level }).run();
+    return;
+  }
+
+  editor.chain().focus()[action]().run();
+};
 
   const showMessage = (message) => {
     setModalMessage(message);
@@ -151,7 +143,7 @@ const handleAction = (editor, action, level = null) => {
         `/api/card-data/update-data?id=${id}&tableName=${tableName}`
       );
       const data = await res.json();
-
+console.log(data,"data")
       setTitle(data.title || "");
       setContent(data.content || "");
       setImage(data.image || null);
@@ -196,7 +188,6 @@ const handleAction = (editor, action, level = null) => {
       if (response.ok) {
         showMessage(`✅ Blog ${id ? "updated" : "submitted"} successfully!`);
         clearForm();
-        setActiveButtons([]); 
         setId("");
     // Remove query params from URL after using them
       const newUrl = window.location.pathname;
@@ -213,30 +204,49 @@ const handleAction = (editor, action, level = null) => {
   };
 
   // eiditor
-  const renderToolbar = (editor) => (
-    <div className="flex gap-2 flex-wrap">
+ const renderToolbar = (editor) => (
+  <div className="flex gap-2 flex-wrap">
     {formatButtons.map(({ action, label, icon, level }) => {
-  const key = level ? `${action}-${level}` : action;
-  const isActive = activeButtons.includes(key);
-  return (
-    <button
-      key={key}
-      type="button"
-      onClick={() => handleAction(editor, action, level)}
-      className={`p-2 flex items-center rounded-md text-sm transition border-2 border-[#6C472D]
-        ${isActive ? "bg-[#6C472D] text-white" : "bg-[#EFEADF] hover:bg-gray-300 text-[#6C472D]"}
-      `}
-    >
-      {icon}
-      <span>{label}</span>
-    </button>
-  );
-})}
+      const key = level ? `${action}-${level}` : action;
 
+      let isActive = false;
+      if (editor) {
+        if (action === "setHeading" && level) {
+          isActive = editor.isActive("heading", { level });
+        } else if (action === "toggleBulletList") {
+          isActive = editor.isActive("bulletList");
+        } else if (action === "toggleOrderedList") {
+          isActive = editor.isActive("orderedList");
+        } else if (action === "toggleBold") {
+          isActive = editor.isActive("bold");
+        } else if (action === "toggleItalic") {
+          isActive = editor.isActive("italic");
+        } else if (action === "toggleUnderline") {
+          isActive = editor.isActive("underline");
+        } else if (action === "toggleStrike") {
+          isActive = editor.isActive("strike");
+        } else if (action === "toggleHighlight") {
+          isActive = editor.isActive("highlight");
+        }
+      }
 
+      return (
+        <button
+          key={key}
+          type="button"
+          onClick={() => handleAction(editor, action, level)}
+          className={`p-2 flex items-center rounded-md text-sm transition border-2 border-[#6C472D]
+            ${isActive ? "bg-[#6C472D] text-white" : "bg-[#EFEADF] hover:bg-gray-300 text-[#6C472D]"}
+          `}
+        >
+          {icon}
+          <span>{label}</span>
+        </button>
+      );
+    })}
+  </div>
+);
 
-    </div>
-  );
   return (
     <MainLayout>
       <form onSubmit={handleSubmit} className="w-full grid grid-cols-12 gap-4">
