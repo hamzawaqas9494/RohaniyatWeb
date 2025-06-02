@@ -1,5 +1,6 @@
 import { writeFile } from "fs/promises";
 import { join } from "path";
+export const dynamic = "force-dynamic";
 import pool from "../../../../lib/db";
 export async function POST(req) {
   try {
