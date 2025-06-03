@@ -67,7 +67,7 @@ export default function Dashboard() {
     setLoading(true);
     try {
       const res = await fetch(
-        `/api/card-data/get-table-data?tableName=${activeTable}&limit=${limit}&page=${page}`
+        `/api/card-data/paginated-data?tableName=${activeTable}&limit=${limit}&page=${page}`
       );
       const result = await res.json();
       setData(result.rows);
