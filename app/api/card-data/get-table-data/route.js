@@ -51,11 +51,14 @@
 // }
 
 
+import pool from "../../../../lib/db";
+export const dynamic = "force-dynamic";
+
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const tableName = searchParams.get("tableName");
-    const id = searchParams.get("id"); // ✅ id le rahe hain
+    const id = searchParams.get("id");
     const limit = parseInt(searchParams.get("limit")) || 5;
     const page = parseInt(searchParams.get("page")) || 1;
     const offset = (page - 1) * limit;
@@ -69,37 +72,36 @@ export async function GET(req) {
     if (!tableName || !allowedTables.includes(tableName)) {
       return new Response(JSON.stringify({ error: "Invalid table name" }), {
         status: 400,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
     }
 
-    let dataQuery;
-    let dataParams;
-    let countQuery = `SELECT COUNT(*) FROM ${tableName}`;
+    let dataQuery = "";
+    let dataParams = [];
+    let totalCount = 0;
 
     if (id) {
-      // ✅ agar id hai, sirf ek record fetch karo
+      // ✅ Specific record fetch by ID
       dataQuery = `SELECT * FROM ${tableName} WHERE id = $1`;
       dataParams = [id];
+      totalCount = 1; // single record
     } else {
-      // ✅ agar id nahi hai, pagination ka logic use karo
+      // ✅ Paginated records
       dataQuery = `SELECT * FROM ${tableName} ORDER BY id DESC LIMIT $1 OFFSET $2`;
       dataParams = [limit, offset];
+
+      const countQuery = `SELECT COUNT(*) FROM ${tableName}`;
+      const countResult = await pool.query(countQuery);
+      totalCount = parseInt(countResult.rows[0].count);
     }
 
     const dataResult = await pool.query(dataQuery, dataParams);
-    const countResult = await pool.query(countQuery);
-    const totalCount = parseInt(countResult.rows[0].count);
 
     return new Response(
       JSON.stringify({ rows: dataResult.rows, total: totalCount }),
       {
         status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       }
     );
   } catch (error) {
