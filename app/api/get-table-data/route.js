@@ -22,7 +22,6 @@ export async function GET(req) {
 
     let query;
     let params = [];
-
     if (id) {
       // ✅ agar specific blog chahiye by ID
       query = `SELECT * FROM ${tableName} WHERE id = $1`;
