@@ -67,7 +67,7 @@ export default function Dashboard() {
     setLoading(true);
     try {
       const res = await fetch(
-        `/api/card-data/paginated-data?tableName=${activeTable}&limit=${limit}&page=${page}`
+        `/api/blog-data/paginated-data?tableName=${activeTable}&limit=${limit}&page=${page}`
       );
       const result = await res.json();
       setData(result.rows);
@@ -84,7 +84,7 @@ export default function Dashboard() {
     if (!deleteId) return;
     try {
       const response = await fetch(
-        `/api/card-data/delete-data?tableName=${activeTable}&id=${deleteId}`,
+        `/api/blog-data/delete-data?tableName=${activeTable}&id=${deleteId}`,
         { method: "DELETE" }
       );
 

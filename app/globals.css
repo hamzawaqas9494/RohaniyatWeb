@@ -31,10 +31,15 @@ body {
 }
 .font-urdu {
   font-family: 'UrduFont', serif;
-  white-space: pre-wrap;
+  /* white-space: pre-wrap; */
   word-spacing: 0.2em;
 }
-
+/* .font-urdu-option {
+  font-family: 'UrduFont', serif;
+  word-spacing: 0.2em;
+  line-height: 1.6;
+  letter-spacing: 1.5px;
+} */
 .text-direction-right {
   direction: rtl;
 }

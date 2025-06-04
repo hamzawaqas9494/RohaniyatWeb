@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useEditor, EditorContent } from "@tiptap/react";
@@ -15,7 +15,6 @@ import Highlight from "@tiptap/extension-highlight";
 import Blockquote from "@tiptap/extension-blockquote";
 import CodeBlock from "@tiptap/extension-code-block";
 import Placeholder from "@tiptap/extension-placeholder";
-import Heading from "@tiptap/extension-heading";
 import { motion } from "framer-motion";
 import MainLayout from "../admin/components/ui/MainLayout";
 import {
@@ -23,6 +22,7 @@ import {
   Italic as ItalicIcon,
   Underline as UnderlineIcon,
   Strikethrough,
+  Pilcrow,
   Highlighter,
   Heading1,
   Heading2,
@@ -34,7 +34,7 @@ import {
   ListOrdered,
   Undo2,
   Redo2,
-  Trash2
+  Trash2,
 } from "lucide-react";
 
 import "../globals.css";
@@ -67,26 +67,44 @@ export default function BlogForm() {
     onUpdate: ({ editor }) => setContent(editor.getHTML()),
     immediatelyRender: false,
   });
-const formatButtons = [
-  { action: "toggleBold", icon: <BoldIcon size={16} />, label: "Bold" },
-  { action: "toggleItalic", icon: <ItalicIcon size={16} />, label: "Italic" },
-  { action: "toggleUnderline", icon: <UnderlineIcon size={16} />, label: "Underline" },
-  { action: "toggleStrike", icon: <Strikethrough size={16} />, label: "Strike" },
-  { action: "toggleHighlight", icon: <Highlighter size={16} />, label: "Highlight" },
-  { action: "setHeading", level: 1, icon: <Heading1 size={16} />, label: "" },
-  { action: "setHeading", level: 2, icon: <Heading2 size={16} />, label: "" },
-  { action: "setHeading", level: 3, icon: <Heading3 size={16} />, label: "" },
-  { action: "setHeading", level: 4, icon: <Heading4 size={16} />, label: "" },
-  { action: "setHeading", level: 5, icon: <Heading5 size={16} />, label: "" },
-  { action: "setHeading", level: 6, icon: <Heading6 size={16} />, label: "" },
-  { action: "toggleBulletList", icon: <List size={16} />, label: "" },
-  { action: "toggleOrderedList", icon: <ListOrdered size={16} />, label: "" },
-  { action: "undo", icon: <Undo2 size={16} />, label: "Undo" },
-  { action: "redo", icon: <Redo2 size={16} />, label: "Redo" },
-  { action: "clearContent", icon: <Trash2 size={16} />, label: "Clear" },
-];
+  const formatButtons = [
+    {
+  action: "setParagraph",
+  icon: <Pilcrow size={16} />,
+  label: "Paragraph"
+},
 
-    const router = useRouter();
+    { action: "toggleBold", icon: <BoldIcon size={16} />, label: "Bold" },
+    { action: "toggleItalic", icon: <ItalicIcon size={16} />, label: "Italic" },
+    {
+      action: "toggleUnderline",
+      icon: <UnderlineIcon size={16} />,
+      label: "Underline",
+    },
+    {
+      action: "toggleStrike",
+      icon: <Strikethrough size={16} />,
+      label: "Strike",
+    },
+    {
+      action: "toggleHighlight",
+      icon: <Highlighter size={16} />,
+      label: "Highlight",
+    },
+    { action: "setHeading", level: 1, icon: <Heading1 size={16} />, label: "" },
+    { action: "setHeading", level: 2, icon: <Heading2 size={16} />, label: "" },
+    { action: "setHeading", level: 3, icon: <Heading3 size={16} />, label: "" },
+    { action: "setHeading", level: 4, icon: <Heading4 size={16} />, label: "" },
+    { action: "setHeading", level: 5, icon: <Heading5 size={16} />, label: "" },
+    { action: "setHeading", level: 6, icon: <Heading6 size={16} />, label: "" },
+    { action: "toggleBulletList", icon: <List size={16} />, label: "" },
+    { action: "toggleOrderedList", icon: <ListOrdered size={16} />, label: "" },
+    { action: "undo", icon: <Undo2 size={16} />, label: "Undo" },
+    { action: "redo", icon: <Redo2 size={16} />, label: "Redo" },
+    { action: "clearContent", icon: <Trash2 size={16} />, label: "Clear" },
+  ];
+
+  const router = useRouter();
   // Check user login
   useEffect(() => {
     const loggedIn = localStorage.getItem("loggedIn");
@@ -95,21 +113,24 @@ const formatButtons = [
     }
   }, [router]);
 
-const handleAction = (editor, action, level = null) => {
-  if (!editor) return;
+  const handleAction = (editor, action, level = null) => {
+    if (!editor) return;
 
-  if (action === "clearContent") {
-    editor.commands.clearContent();
-    return;
-  }
+    if (action === "clearContent") {
+      editor.commands.clearContent();
+      return;
+    }
 
-  if (action === "setHeading" && level) {
-    editor.chain().focus().setHeading({ level }).run();
-    return;
-  }
-
-  editor.chain().focus()[action]().run();
-};
+    if (action === "setHeading" && level) {
+      editor.chain().focus().setHeading({ level }).run();
+      return;
+    }
+    if (action === "setParagraph") {
+      editor.chain().focus().setParagraph().run();
+      return;
+    }
+    editor.chain().focus()[action]().run();
+  };
 
   const showMessage = (message) => {
     setModalMessage(message);
@@ -123,7 +144,7 @@ const handleAction = (editor, action, level = null) => {
     setTableName("");
     if (editor) editor.commands.clearContent();
   };
-  
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const searchParams = new URLSearchParams(window.location.search);
@@ -135,36 +156,34 @@ const handleAction = (editor, action, level = null) => {
   }, []);
 
   ///////////////////////////////////////////////////update data on the base of id////////////////////////////////
- useEffect(() => {
-  const fetchData = async () => {
-    if (!id || !tableName || !editor) return;
-    try {
-      const res = await fetch(
-        `/api/card-data/update-data?id=${id}&tableName=${tableName}`
-      );
-      const data = await res.json();
-console.log(data,"data")
-      setTitle(data.title || "");
-      setContent(data.content || "");
-      setImage(data.image || null);
-      setTableName(tableName);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!id || !tableName || !editor) return;
+      try {
+        const res = await fetch(
+          `/api/blog-data/update-data?id=${id}&tableName=${tableName}`
+        );
+        const data = await res.json();
+        console.log(data, "data");
+        setTitle(data.title || "");
+        setContent(data.content || "");
+        setImage(data.image || null);
+        setTableName(tableName);
 
-      // ✅ Only set content if editor exists and content is non-empty
-      if (data.content) {
-        editor.commands.setContent(data.content);
+        // ✅ Only set content if editor exists and content is non-empty
+        if (data.content) {
+          editor.commands.setContent(data.content);
+        }
+      } catch (err) {
+        showMessage("❌ Failed to load blog data.");
       }
-    } catch (err) {
-      showMessage("❌ Failed to load blog data.");
-    }
-  };
+    };
 
-  fetchData();
-}, [id, tableName, editor]);
+    fetchData();
+  }, [id, tableName, editor]);
 
-
-
-      /////////////////////////////////////send data to the database through editor////////////////////////////////////////
- const handleSubmit = async (e) => {
+  /////////////////////////////////////send data to the database through editor////////////////////////////////////////
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !content || !tableName) {
       const missing = [];
@@ -181,7 +200,7 @@ console.log(data,"data")
     formData.append("tableName", tableName);
     if (id) formData.append("id", id);
     try {
-      const response = await fetch("/api/card-data/send-data", {
+      const response = await fetch("/api/blog-data/send-data", {
         method: "POST",
         body: formData,
       });
@@ -189,63 +208,67 @@ console.log(data,"data")
         showMessage(`✅ Blog ${id ? "updated" : "submitted"} successfully!`);
         clearForm();
         setId("");
-    // Remove query params from URL after using them
-      const newUrl = window.location.pathname;
-      router.replace(newUrl, undefined, { shallow: true });
+        // Remove query params from URL after using them
+        const newUrl = window.location.pathname;
+        router.replace(newUrl, undefined, { shallow: true });
       } else {
         showMessage("❌ Blog submission failed!");
       }
-  
-          
     } catch (err) {
       showMessage("❌ Something went wrong!");
     }
-
   };
 
   // eiditor
- const renderToolbar = (editor) => (
-  <div className="flex gap-2 flex-wrap">
-    {formatButtons.map(({ action, label, icon, level }) => {
-      const key = level ? `${action}-${level}` : action;
+  const renderToolbar = (editor) => (
+    <div className="flex gap-2 flex-wrap">
+      {formatButtons.map(({ action, label, icon, level }) => {
+        const key = level ? `${action}-${level}` : action;
 
-      let isActive = false;
-      if (editor) {
-        if (action === "setHeading" && level) {
-          isActive = editor.isActive("heading", { level });
-        } else if (action === "toggleBulletList") {
-          isActive = editor.isActive("bulletList");
-        } else if (action === "toggleOrderedList") {
-          isActive = editor.isActive("orderedList");
-        } else if (action === "toggleBold") {
-          isActive = editor.isActive("bold");
-        } else if (action === "toggleItalic") {
-          isActive = editor.isActive("italic");
-        } else if (action === "toggleUnderline") {
-          isActive = editor.isActive("underline");
-        } else if (action === "toggleStrike") {
-          isActive = editor.isActive("strike");
-        } else if (action === "toggleHighlight") {
-          isActive = editor.isActive("highlight");
+        let isActive = false;
+        const hasContent = editor.getHTML().replace(/<[^>]*>?/gm, "").trim().length > 0;
+        if (hasContent) {
+          if (action === "setHeading" && level) {
+            isActive = editor.isActive("heading", { level });
+          } else if (action === "setParagraph") {
+            isActive = editor.isActive("paragraph");
+          } else if (action === "toggleBulletList") {
+            isActive = editor.isActive("bulletList");
+          } else if (action === "toggleOrderedList") {
+            isActive = editor.isActive("orderedList");
+          } else if (action === "toggleBold") {
+            isActive = editor.isActive("bold");
+          } else if (action === "toggleItalic") {
+            isActive = editor.isActive("italic");
+          } else if (action === "toggleUnderline") {
+            isActive = editor.isActive("underline");
+          } else if (action === "toggleStrike") {
+            isActive = editor.isActive("strike");
+          } else if (action === "toggleHighlight") {
+            isActive = editor.isActive("highlight");
+          }
         }
-      }
 
-      return (
-        <button
-          key={key}
-          type="button"
-          onClick={() => handleAction(editor, action, level)}
-          className={`p-2 flex items-center rounded-md text-sm transition border-2 border-[#6C472D]
-            ${isActive ? "bg-[#6C472D] text-white" : "bg-[#EFEADF] hover:bg-gray-300 text-[#6C472D]"}
+        return (
+          <button
+            key={key}
+            type="button"
+            onClick={() => handleAction(editor, action, level)}
+            className={`p-1 flex items-center rounded-md text-sm transition border-2 border-[#6C472D]
+            ${
+              isActive
+                ? "bg-[#6C472D] text-white"
+                : "bg-[#EFEADF] hover:bg-gray-300 text-[#6C472D]"
+            }
           `}
-        >
-          {icon}
-          <span>{label}</span>
-        </button>
-      );
-    })}
-  </div>
-);
+          >
+            {icon}
+            <span>{label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
 
   return (
     <MainLayout>
@@ -254,7 +277,7 @@ console.log(data,"data")
           <select
             value={tableName || ""}
             onChange={(e) => setTableName(e.target.value)}
-            className="p-2 w-full text-[#6C472D] text-right text-xl font-urdu font-semibold border-2 border-[#6C472D] rounded-md bg-white outline-none"
+            className="p-2 w-full text-[#6C472D] text-xl text-right font-urdu font-semibold border-2 border-[#6C472D] rounded-md bg-white outline-none"
           >
             <option value="">ٹیبل منتخب کریں</option>
             <option value="taweez">تعویذ</option>
@@ -299,13 +322,13 @@ console.log(data,"data")
           />
         </div>
         <div className="col-span-12">
-          <div className="px-2 py-3 border-2 border-[#D4AF37] w-full rounded-md bg-white">
+          <div className="p-4 border-2 border-[#D4AF37] w-full rounded-md bg-white">
             {editor && renderToolbar(editor)}
             <div
-              className="mt-3 border-2 border-[#D4AF37] text-xl rounded-md text-right overflow-y-auto max-h-96"
+              className="mt-4 border-2 border-[#D4AF37] text-xl rounded-md font-urdu text-right overflow-y-auto max-h-96"
               dir="rtl"
             >
-              <EditorContent editor={editor} />
+              <EditorContent editor={editor} className="mt-1"/>
             </div>
           </div>
         </div>
