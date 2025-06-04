@@ -16,18 +16,19 @@ export async function GET(req) {
     if (!tableName || !allowedTables.includes(tableName)) {
       return new Response(JSON.stringify({ error: "Invalid table name" }), {
         status: 400,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*", // 👈 Allow all origins (for testing)
+        },
       });
     }
 
     let query;
     let params = [];
     if (id) {
-      // ✅ agar specific blog chahiye by ID
       query = `SELECT * FROM ${tableName} WHERE id = $1`;
       params = [id];
     } else {
-      // ✅ agar saare blogs chahiye reverse order mein
       query = `SELECT * FROM ${tableName} ORDER BY id DESC`;
     }
 
@@ -40,14 +41,20 @@ export async function GET(req) {
       }),
       {
         status: 200,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*", // 👈 CORS header
+        },
       }
     );
   } catch (error) {
     console.error("Error fetching data:", error);
     return new Response(JSON.stringify({ error: "Internal Server Error" }), {
       status: 500,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*", // 👈 CORS header
+      },
     });
   }
 }
