@@ -150,7 +150,6 @@ export default function BlogForm() {
           `/api/blog-data/update-data?id=${id}&tableName=${tableName}`
         );
         const data = await res.json();
-        console.log(data, "data");
         setTitle(data.title || "");
         setContent(data.content || "");
         setImage(data.image || null);

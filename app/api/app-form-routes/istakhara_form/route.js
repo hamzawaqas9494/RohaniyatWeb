@@ -3,7 +3,6 @@ import nodemailer from "nodemailer";
 export async function POST(req) {
   try {
     const body = await req.json();
-    console.log(body, "Received data from React Native app");
     if (!body.name || !body.email) {
       return NextResponse.json(
         { error: "Name and Email are required!" },
