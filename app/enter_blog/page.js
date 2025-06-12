@@ -22,7 +22,6 @@ import {
   Italic as ItalicIcon,
   Underline as UnderlineIcon,
   Strikethrough,
-  Pilcrow,
   Highlighter,
   Heading1,
   Heading2,
@@ -36,7 +35,7 @@ import {
   Redo2,
   Trash2,
 } from "lucide-react";
-
+import { TbLetterP } from "react-icons/tb";
 import "../globals.css";
 export default function BlogForm() {
   const [title, setTitle] = useState("");
@@ -69,39 +68,26 @@ export default function BlogForm() {
   });
   const formatButtons = [
     {
-  action: "setParagraph",
-  icon: <Pilcrow size={16} />,
-  label: "Paragraph"
-},
+      action: "setParagraph",
+      icon: <TbLetterP size={16} />,
+    },
 
-    { action: "toggleBold", icon: <BoldIcon size={16} />, label: "Bold" },
-    { action: "toggleItalic", icon: <ItalicIcon size={16} />, label: "Italic" },
-    {
-      action: "toggleUnderline",
-      icon: <UnderlineIcon size={16} />,
-      label: "Underline",
-    },
-    {
-      action: "toggleStrike",
-      icon: <Strikethrough size={16} />,
-      label: "Strike",
-    },
-    {
-      action: "toggleHighlight",
-      icon: <Highlighter size={16} />,
-      label: "Highlight",
-    },
-    { action: "setHeading", level: 1, icon: <Heading1 size={16} />, label: "" },
-    { action: "setHeading", level: 2, icon: <Heading2 size={16} />, label: "" },
-    { action: "setHeading", level: 3, icon: <Heading3 size={16} />, label: "" },
-    { action: "setHeading", level: 4, icon: <Heading4 size={16} />, label: "" },
-    { action: "setHeading", level: 5, icon: <Heading5 size={16} />, label: "" },
-    { action: "setHeading", level: 6, icon: <Heading6 size={16} />, label: "" },
-    { action: "toggleBulletList", icon: <List size={16} />, label: "" },
-    { action: "toggleOrderedList", icon: <ListOrdered size={16} />, label: "" },
-    { action: "undo", icon: <Undo2 size={16} />, label: "Undo" },
-    { action: "redo", icon: <Redo2 size={16} />, label: "Redo" },
-    { action: "clearContent", icon: <Trash2 size={16} />, label: "Clear" },
+    { action: "toggleBold", icon: <BoldIcon size={16} /> },
+    { action: "toggleItalic", icon: <ItalicIcon size={16} /> },
+    { action: "toggleUnderline", icon: <UnderlineIcon size={16} /> },
+    { action: "toggleStrike", icon: <Strikethrough size={16} /> },
+    { action: "toggleHighlight", icon: <Highlighter size={16} /> },
+    { action: "setHeading", level: 1, icon: <Heading1 size={16} /> },
+    { action: "setHeading", level: 2, icon: <Heading2 size={16} /> },
+    { action: "setHeading", level: 3, icon: <Heading3 size={16} /> },
+    { action: "setHeading", level: 4, icon: <Heading4 size={16} /> },
+    { action: "setHeading", level: 5, icon: <Heading5 size={16} /> },
+    { action: "setHeading", level: 6, icon: <Heading6 size={16} /> },
+    { action: "toggleBulletList", icon: <List size={16} /> },
+    { action: "toggleOrderedList", icon: <ListOrdered size={16} /> },
+    { action: "undo", icon: <Undo2 size={16} /> },
+    { action: "redo", icon: <Redo2 size={16} /> },
+    { action: "clearContent", icon: <Trash2 size={16} /> },
   ];
 
   const router = useRouter();
@@ -226,7 +212,11 @@ export default function BlogForm() {
         const key = level ? `${action}-${level}` : action;
 
         let isActive = false;
-        const hasContent = editor.getHTML().replace(/<[^>]*>?/gm, "").trim().length > 0;
+        const hasContent =
+          editor
+            .getHTML()
+            .replace(/<[^>]*>?/gm, "")
+            .trim().length > 0;
         if (hasContent) {
           if (action === "setHeading" && level) {
             isActive = editor.isActive("heading", { level });
@@ -254,7 +244,7 @@ export default function BlogForm() {
             key={key}
             type="button"
             onClick={() => handleAction(editor, action, level)}
-            className={`p-1 flex items-center rounded-md text-sm transition border-2 border-[#6C472D]
+            className={`p-2 flex items-center rounded-md text-sm transition border-2 border-[#6C472D]
             ${
               isActive
                 ? "bg-[#6C472D] text-white"
@@ -299,7 +289,7 @@ export default function BlogForm() {
           <input
             type="text"
             dir="auto"
-            placeholder="عنوان یہاں لکھیں"
+            placeholder="یہاں عنوان لکھیں"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="p-3 w-full text-right text-[#6C472D] text-xl font-urdu font-semibold border-2 border-[#6C472D] rounded-md bg-white outline-none placeholder-[#6C472D]"
@@ -325,10 +315,10 @@ export default function BlogForm() {
           <div className="p-4 border-2 border-[#D4AF37] w-full rounded-md bg-white">
             {editor && renderToolbar(editor)}
             <div
-              className="mt-4 border-2 border-[#D4AF37] text-xl rounded-md font-urdu text-right overflow-y-auto max-h-96"
+              className="mt-4 border-2 border-[#D4AF37] text-xl rounded-md text-right overflow-y-auto max-h-96"
               dir="rtl"
             >
-              <EditorContent editor={editor} className="mt-1"/>
+              <EditorContent editor={editor} className="mt-1" />
             </div>
           </div>
         </div>
