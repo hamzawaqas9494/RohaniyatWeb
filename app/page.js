@@ -72,7 +72,7 @@ const validPassword = process.env.NEXT_PUBLIC_LOGIN_PASSWORD;
 
         <button
           type="submit"
-          className="w-full bg-[#6C472D] text-white py-2 rounded hover:bg-[#5a3b23] transition-colors"
+          className="w-full bg-[#6C472D] text-white py-2 rounded hover:bg-[#5a3b23] transition-colors cursor-pointer"
         >
           Login
         </button>
