@@ -237,7 +237,6 @@ export default function BlogForm() {
             isActive = editor.isActive("highlight");
           }
         }
-
         return (
           <button
             key={key}
@@ -258,15 +257,14 @@ export default function BlogForm() {
       })}
     </div>
   );
-
   return (
     <MainLayout>
       <form onSubmit={handleSubmit} className="w-full grid grid-cols-12 gap-4">
-        <div className="col-span-12 md:col-span-3 max-h-[150px] overflow-y-auto">
+        <div className="relative col-span-12 md:col-span-3 max-h-[150px] overflow-y-auto">
           <select
             value={tableName || ""}
             onChange={(e) => setTableName(e.target.value)}
-            className="p-2 w-full text-[#6C472D] text-xl text-right font-urdu font-semibold border-2 border-[#6C472D] rounded-md bg-white outline-none"
+            className="px-6 py-3 appearance-none [-webkit-appearance:none] bg-white border-2 border-[#6C472D] rounded-md  w-full text-[#6C472D] text-xl text-right font-urdu font-semibold outline-none cursor-pointer"
           >
             <option value="">ٹیبل منتخب کریں</option>
             <option value="taweez">تعویذ</option>
@@ -283,7 +281,23 @@ export default function BlogForm() {
             <option value="alviamal">علوی اعمال</option>
             <option value="saflitavezat">سفلی تعویذات</option>
           </select>
+          <div className="p-1 pointer-events-none absolute right-0 top-1/2 transform -translate-y-1/2">
+            <svg
+              className="w-4 h-4 text-[#6C472D]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={4}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
         </div>
+
         <div className="col-span-12 md:col-span-6">
           <input
             type="text"
@@ -291,7 +305,7 @@ export default function BlogForm() {
             placeholder="یہاں عنوان لکھیں"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="p-3 w-full text-right text-[#6C472D] text-xl font-urdu font-semibold border-2 border-[#6C472D] rounded-md bg-white outline-none placeholder-[#6C472D]"
+            className="p-3 w-full text-right text-[#6C472D] text-xl font-urdu font-semibold border-2 border-[#6C472D] rounded-md bg-white outline-none placeholder-[#6C472D] cursor-pointer"
           />
         </div>
         <div className="col-span-12 md:col-span-3">
@@ -314,10 +328,10 @@ export default function BlogForm() {
           <div className="p-4 border-2 border-[#D4AF37] w-full rounded-md bg-white">
             {editor && renderToolbar(editor)}
             <div
-              className="mt-4 border-2 border-[#D4AF37] text-xl rounded-md text-right overflow-y-auto max-h-96"
+              className="mt-4 border-2 border-[#D4AF37] text-xl rounded-md text-right overflow-y-auto max-h-96 cursor-pointer"
               dir="rtl"
             >
-              <EditorContent editor={editor} className="mt-1" />
+              <EditorContent editor={editor} className="mt-1 text-black" />
             </div>
           </div>
         </div>
