@@ -50,22 +50,22 @@ const validPassword = process.env.NEXT_PUBLIC_LOGIN_PASSWORD;
           Login
         </h2>
 
-        <label className="block mb-1">Email:</label>
+        <label className="block mb-1 text-[#6C472D] font-bold">Email:</label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#6C472D]"
+          className="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#6C472D] text-[#6C472D]"
           placeholder="example@example.com"
           required
         />
 
-        <label className="block mb-1">Password:</label>
+        <label className="block mb-1 text-[#6C472D] font-bold">Password:</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#6C472D]"
+          className="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#6C472D] text-[#6C472D]"
           placeholder="Enter password"
           required
         />
