@@ -2,6 +2,7 @@ import { writeFile } from "fs/promises";
 import { join } from "path";
 export const dynamic = "force-dynamic";
 import pool from "../../../../lib/db";
+
 export async function POST(req) {
   try {
     const formData = await req.formData();
@@ -9,16 +10,16 @@ export async function POST(req) {
     const file = formData.get("image");
     const title = formData.get("title");
     const content = formData.get("content");
-    const id = formData.get("id");
+
+    // ✅ Validation
     if (!tableName || !title || !content) {
-      return new Response(
-        JSON.stringify({ error: "Missing required fields" }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return new Response(JSON.stringify({ error: "Missing required fields" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
+
+    // ✅ Allow only predefined tables
     const allowedTables = [
       "taweez",
       "wazaif",
@@ -40,6 +41,8 @@ export async function POST(req) {
         headers: { "Content-Type": "application/json" },
       });
     }
+
+    // ✅ Handle image upload
     let imagePath = null;
     if (file && typeof file.name === "string") {
       const bytes = await file.arrayBuffer();
@@ -49,31 +52,28 @@ export async function POST(req) {
       await writeFile(filePath, buffer);
       imagePath = `/uploads/${fileName}`;
     }
+
+    // ✅ Build INSERT query
     let query, queryParams;
-    if (id) {
-      //////////////////////////// ✅ UPDATE existing post///////////////////////////////////
+    if (imagePath) {
       query = `
-        UPDATE ${tableName}
-        SET title = $1, content = $2, ${imagePath ? "image = $3," : ""}
-        updated_at = NOW()
-        WHERE id = $${imagePath ? 4 : 3}
+        INSERT INTO ${tableName} (title, content, image, created_at)
+        VALUES ($1, $2, $3, NOW())
         RETURNING *;
       `;
-      queryParams = imagePath
-        ? [title, content, imagePath, id]
-        : [title, content, id];
+      queryParams = [title, content, imagePath];
     } else {
-      ///////////////////////////////// ✅ INSERT new post///////////////////////////////////
       query = `
-        INSERT INTO ${tableName} (title, content, ${
-        imagePath ? "image," : ""
-      } created_at)
-        VALUES ($1, $2, ${imagePath ? "$3," : ""} NOW())
+        INSERT INTO ${tableName} (title, content, created_at)
+        VALUES ($1, $2, NOW())
         RETURNING *;
       `;
-      queryParams = imagePath ? [title, content, imagePath] : [title, content];
+      queryParams = [title, content];
     }
+
+    // ✅ Execute query
     const { rows } = await pool.query(query, queryParams);
+
     return new Response(JSON.stringify({ success: true, data: rows[0] }), {
       status: 200,
       headers: { "Content-Type": "application/json" },

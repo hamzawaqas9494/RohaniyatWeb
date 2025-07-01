@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "next start -p $PORT",
+    "start": "cross-env NODE_ENV=production node server.js",
     "lint": "next lint"
   },
   "dependencies": {
@@ -31,6 +31,9 @@
     "@tiptap/starter-kit": "^2.11.5",
     "@vercel/postgres": "^0.10.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^17.0.0",
+    "express": "^5.1.0",
     "framer-motion": "^12.5.0",
     "lucide-react": "^0.488.0",
     "next": "15.2.1",
