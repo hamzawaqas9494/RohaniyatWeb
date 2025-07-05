@@ -47,21 +47,14 @@ export default function BlogForm() {
   const [id, setId] = useState("");
 
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Bold,
-      Italic,
-      Underline,
-      Strike,
-      BulletList,
-      OrderedList,
-      ListItem,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
-      Highlight,
-      Blockquote,
-      CodeBlock,
-      Placeholder.configure({ placeholder: "یہاں مواد لکھیں" }),
-    ],
+  extensions: [
+  StarterKit,
+  Underline, // ✅ not included in StarterKit
+  TextAlign.configure({ types: ["heading", "paragraph"] }),
+  Highlight,
+  Placeholder.configure({ placeholder: "یہاں مواد لکھیں" }),
+],
+
     content: "",
     onUpdate: ({ editor }) => setContent(editor.getHTML()),
     immediatelyRender: false,
@@ -328,10 +321,10 @@ export default function BlogForm() {
           <div className="p-4 border-2 border-[#D4AF37] w-full rounded-md bg-white">
             {editor && renderToolbar(editor)}
             <div
-              className="mt-4 border-2 border-[#D4AF37] text-xl rounded-md text-right overflow-y-auto max-h-96 cursor-pointer"
+              className="mt-4 border-2 border-[#D4AF37] text-xl rounded-md text-right overflow-y-auto max-h-96"
               dir="rtl"
             >
-              <EditorContent editor={editor} className="mt-1 text-black" />
+              <EditorContent editor={editor} className="text-black" />
             </div>
           </div>
         </div>

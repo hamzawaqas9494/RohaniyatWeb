@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useRouter, usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -32,16 +32,14 @@ const Sidebar = ({ showSideBar }) => {
       <div className="relative flex min-h-0 flex-1 flex-col pt-0">
         <div className="flex flex-1 flex-col overflow-y-auto">
           <div className="flex items-center justify-center py-2 border-b-2 border-[#EFEADF]">
-            <div className="flex items-center justify-center w-35 h-35 bg-[#EFEADF] rounded-full">
-              <Link href="/">
-                <Image
-                  width={100}
-                  height={100}
-                  alt="Logo"
-                  className="w-16 md:w-20 h-auto"
-                  src="/assets/images/main-logo.png"
-                />
-              </Link>
+            <div className="flex items-center justify-center w-32 h-32 bg-[#EFEADF] rounded-full">
+              <Image
+                src="/assets/images/main-logo.png"
+                alt="Logo"
+                width={60}
+                height={100}
+                className="w-auto h-auto"
+              />
             </div>
           </div>
           <ul className="py-2 space-y-2">
