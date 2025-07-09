@@ -140,17 +140,19 @@ export default function BlogForm() {
       if (!id || !tableName || !editor) return;
       try {
         const res = await fetch(
-          `/api/blog-data/update-data?id=${id}&tableName=${tableName}`
+          `/api/blog-data/get-table-data?id=${id}&tableName=${tableName}`
         );
         const data = await res.json();
-        setTitle(data.title || "");
-        setContent(data.content || "");
-        setImage(data.image || null);
+
+        console.log(data.rows[0].title,"data")
+        setTitle(data.rows[0].title || "");
+        setContent(data.rows[0].content || "");
+        setImage(data.rows[0].image || null);
         setTableName(tableName);
 
         // ✅ Only set content if editor exists and content is non-empty
-        if (data.content) {
-          editor.commands.setContent(data.content);
+        if (data.rows[0].content) {
+          editor.commands.setContent(data.rows[0].content);
         }
       } catch (err) {
         showMessage("❌ Failed to load blog data.");
@@ -161,41 +163,58 @@ export default function BlogForm() {
   }, [id, tableName, editor]);
 
   /////////////////////////////////////send data to the database through editor////////////////////////////////////////
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!title || !content || !tableName) {
-      const missing = [];
-      if (!title) missing.push("Title");
-      if (!content) missing.push("Content");
-      if (!tableName) missing.push("Table Name");
-      showMessage(`⚠ Missing field(s): ${missing.join(", ")}`);
-      return;
-    }
-    const formData = new FormData();
-    formData.append("title", title);
-    if (image) formData.append("image", image);
-    formData.append("content", content);
-    formData.append("tableName", tableName);
-    if (id) formData.append("id", id);
-    try {
-      const response = await fetch("/api/blog-data/send-data", {
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!title || !content || !tableName) {
+    const missing = [];
+    if (!title) missing.push("Title");
+    if (!content) missing.push("Content");
+    if (!tableName) missing.push("Table Name");
+    showMessage(`⚠ Missing field(s): ${missing.join(", ")}`);
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("content", content);
+  formData.append("tableName", tableName);
+  if (image) formData.append("image", image);
+
+  try {
+    let response;
+
+    // ✅ If ID exists, it's an update (PUT)
+    if (id) {
+      formData.append("id", id);
+      response = await fetch("/api/blog-data/update-data", {
+        method: "PUT",
+        body: formData,
+      });
+    } else {
+      // ✅ Otherwise, it's a create (POST)
+      response = await fetch("/api/blog-data/send-data", {
         method: "POST",
         body: formData,
       });
-      if (response.ok) {
-        showMessage(`✅ Blog ${id ? "updated" : "submitted"} successfully!`);
-        clearForm();
-        setId("");
-        // Remove query params from URL after using them
-        const newUrl = window.location.pathname;
-        router.replace(newUrl, undefined, { shallow: true });
-      } else {
-        showMessage("❌ Blog submission failed!");
-      }
-    } catch (err) {
-      showMessage("❌ Something went wrong!");
     }
-  };
+
+    if (response.ok) {
+      showMessage(`✅ Blog ${id ? "updated" : "posted"} successfully!`);
+      clearForm();
+      setId("");
+
+      // Remove query params
+      const newUrl = window.location.pathname;
+      router.replace(newUrl, undefined, { shallow: true });
+    } else {
+      showMessage("❌ Blog submission failed!");
+    }
+  } catch (err) {
+    showMessage("❌ Something went wrong!");
+  }
+};
+
 
   // eiditor
   const renderToolbar = (editor) => (
