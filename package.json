@@ -2,12 +2,11 @@
   "name": "wazaif",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "cross-env NODE_ENV=production node server.js",
-    "lint": "next lint"
-  },
+"scripts": {
+  "dev": "next dev",         
+  "build": "next build",   
+  "start": "node server.js" 
+},
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^41.4.2",
     "@ckeditor/ckeditor5-react": "^9.5.0",
@@ -46,14 +45,11 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.1.11",
     "@types/react": "19.0.10",
-    "autoprefixer": "^10.4.21",
     "cross-env": "^7.0.3",
     "eslint": "^9",
     "eslint-config-next": "15.2.1",
-    "expo-cli": "^6.3.12",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.11"
+    "expo-cli": "^6.3.12"
   }
 }
