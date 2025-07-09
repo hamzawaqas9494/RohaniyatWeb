@@ -88,7 +88,6 @@ export async function PUT(req) {
       const fileName = `${Date.now()}-${file.name}`;
       const uploadDir = join(process.cwd(), "public/uploads");
 
-      
       if (!existsSync(uploadDir)) {
         await mkdir(uploadDir, { recursive: true });
       }
