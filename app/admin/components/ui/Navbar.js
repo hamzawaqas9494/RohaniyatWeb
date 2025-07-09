@@ -8,7 +8,7 @@ const Navbar = ({ handleSideBarStatus }) => {
   };
 
   return (
-    <nav className="w-full fixed top-0 z-50 bg-[#6C472D]">
+    <nav className="w-full top-0 z-50 bg-[#6C472D]">
       <div className="px-2 md:px-4 min-h-[8vh] sm:min-h-[10vh] flex items-center justify-between">
         <div className="flex items-center">
           <button

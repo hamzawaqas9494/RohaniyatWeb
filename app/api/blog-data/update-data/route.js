@@ -1,6 +1,54 @@
-import { writeFile } from "fs/promises";
+////////////////////////////////////////////////// postgresql////////////////////////////////////////////////// 
+// import pool from "../../../../lib/db";
+// export const dynamic = "force-dynamic";
+// export async function GET(req) {
+//   try {
+//     const { searchParams } = new URL(req.url);
+//     const tableName = searchParams.get("tableName");
+//     const id = searchParams.get("id");
+//       const allowedTables = [
+//       "taweez", "wazaif", "qutb", "rohaniilaaj", "tawizatusmaniya",
+//       "rohanidokan", "nooriaamal", "noorialviaamal", "ooliaallahkaamal",
+//       "bamokalamal", "khasulkhasammal", "alviamal", "saflitavezat",
+//     ];
+//     if (!tableName || !allowedTables.includes(tableName)) {
+//       return new Response(JSON.stringify({ error: "Invalid table name" }), {
+//         status: 400,
+//         headers: { "Content-Type": "application/json" },
+//       });
+//     }
+//     if (!id) {
+//       return new Response(JSON.stringify({ error: "Missing ID" }), {
+//         status: 400,
+//         headers: { "Content-Type": "application/json" },
+//       });
+//     }
+//     const result = await pool.query(`SELECT * FROM ${tableName} WHERE id = $1`, [id]);
+//     if (result.rows.length === 0) {
+//       return new Response(JSON.stringify({ error: "Record not found" }), {
+//         status: 404,
+//         headers: { "Content-Type": "application/json" },
+//       });
+//     }
+//     return new Response(JSON.stringify(result.rows[0]), {
+//       status: 200,
+//       headers: { "Content-Type": "application/json" },
+//     });
+//   } catch (error) {
+//     console.error("Error fetching record:", error);
+//     return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+//       status: 500,
+//       headers: { "Content-Type": "application/json" },
+//     });
+//   }
+// }
+////////////////////////////////////////////////// mysql////////////////////////////////////////////////// 
+// import connectToDatabase from "../../../../lib/db";
+import { writeFile, mkdir } from "fs/promises";
+import { existsSync } from "fs";
 import { join } from "path";
-import pool from "../../../../lib/db";
+import connectToDatabase from "../../../../lib/db";
+
 export const dynamic = "force-dynamic";
 
 const allowedTables = [
@@ -12,7 +60,6 @@ const allowedTables = [
 export async function PUT(req) {
   try {
     const formData = await req.formData();
-
     const tableName = formData.get("tableName");
     const id = formData.get("id");
     const title = formData.get("title");
@@ -26,8 +73,8 @@ export async function PUT(req) {
       });
     }
 
-    if (!id || !title || !content) {
-      return new Response(JSON.stringify({ error: "Missing required fields" }), {
+    if (!id || isNaN(Number(id)) || !title || !content) {
+      return new Response(JSON.stringify({ error: "Missing or invalid fields" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },
       });
@@ -39,32 +86,39 @@ export async function PUT(req) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
       const fileName = `${Date.now()}-${file.name}`;
-      const filePath = join(process.cwd(), "public/uploads", fileName);
+      const uploadDir = join(process.cwd(), "public/uploads");
+
+      if (!existsSync(uploadDir)) {
+        await mkdir(uploadDir, { recursive: true });
+      }
+
+      const filePath = join(uploadDir, fileName);
       await writeFile(filePath, buffer);
       imagePath = `/uploads/${fileName}`;
     }
 
-    let query = `
-      UPDATE ${tableName}
-      SET title = $1, content = $2${imagePath ? ", image = $3" : ""}, updated_at = NOW()
-      WHERE id = $${imagePath ? 4 : 3}
-      RETURNING *;
+    const db = await connectToDatabase();
+
+    const query = `
+      UPDATE \`${tableName}\`
+      SET title = ?, content = ?${imagePath ? ", image = ?" : ""}, updated_at = NOW()
+      WHERE id = ?
     `;
 
     const queryParams = imagePath
       ? [title, content, imagePath, id]
       : [title, content, id];
 
-    const result = await pool.query(query, queryParams);
+    const [result] = await db.query(query, queryParams);
 
-    if (result.rows.length === 0) {
+    if (result.affectedRows === 0) {
       return new Response(JSON.stringify({ error: "Blog not found" }), {
         status: 404,
         headers: { "Content-Type": "application/json" },
       });
     }
 
-    return new Response(JSON.stringify({ success: true, data: result.rows[0] }), {
+    return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
