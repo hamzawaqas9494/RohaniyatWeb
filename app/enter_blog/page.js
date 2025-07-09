@@ -192,7 +192,7 @@ export default function BlogForm() {
         body: formData,
       });
     } else {
-      // ✅ Otherwise, it's a create (POST)
+      // ✅ Otherwise it's a create (POST)
       response = await fetch("/api/blog-data/send-data", {
         method: "POST",
         body: formData,
