@@ -90,7 +90,7 @@
 //////////////////////////////////////////////////// mysql query ////////////////////////////////////////////////
 import { writeFile } from "fs/promises";
 import { join } from "path";
-import { connectToDatabase } from "../../../../lib/db";
+import connectToDatabase from "../../../../lib/db";
 export const dynamic = "force-dynamic";
 export async function POST(req) {
   try {
