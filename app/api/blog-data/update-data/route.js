@@ -94,7 +94,7 @@ export async function PUT(req) {
 
       const filePath = join(uploadDir, fileName);
       await writeFile(filePath, buffer);
-      imagePath = `/uploads/${fileName}`;
+      imagePath = fileName;
     }
 
     const db = await connectToDatabase();

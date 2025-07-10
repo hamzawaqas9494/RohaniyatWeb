@@ -219,7 +219,7 @@ export default function Dashboard() {
                       <img
                         height={8}
                         width={8}
-                        src={item.image}
+                     src={`/uploads/${item.image}`}
                         className="w-10 h-10 object-cover"
                         alt=""
                       />
