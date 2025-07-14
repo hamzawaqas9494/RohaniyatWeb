@@ -1,8 +1,8 @@
 import "./globals.css";
 export const metadata = {
-  title: 'Rohaniyat',
+  title: 'Idara Rohaniyat',
   icons: {
-    icon: '/web-icon.png',
+    icon:'web-icon.png'
   },
 };
 export default function RootLayout({ children }) {
