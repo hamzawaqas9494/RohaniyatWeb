@@ -6,6 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
 import Highlight from "@tiptap/extension-highlight";
 import Placeholder from "@tiptap/extension-placeholder";
+import Underline from '@tiptap/extension-underline'; // Editor functionality ke liye
 import { motion } from "framer-motion";
 import MainLayout from "../admin/components/ui/MainLayout";
 import {

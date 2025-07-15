@@ -1,8 +1,17 @@
-/** @type {import('next').NextConfig} */
+// /** @type {import('next').NextConfig} */
+// const nextConfig = {
+//   // Completely remove turbo field
+//   experimental: {},
+// };
+
+// module.exports = nextConfig;
+   /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Completely remove turbo field
   experimental: {},
+
+  images: {
+    domains: ['gpvvxhhvxzefphknwtng.supabase.co']
+  }
 };
 
 module.exports = nextConfig;
-   
