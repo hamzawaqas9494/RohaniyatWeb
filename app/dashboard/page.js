@@ -201,16 +201,15 @@ export default function Dashboard() {
                       : "no data found"}
                   </td>
                   <td className="py-2 sm:px-4 flex items-center justify-center text-[#6C472D]">
-                    {item.image ? (
-                      <img
-                        height={8}
-                        width={8}
-                         src={item.image}
-                        className="w-10 h-10 object-cover"
-                        alt=""
-                      />
+                  {item.image ? (
+                    <Image
+                     src={item.image}
+                     width={40}
+                     height={40}
+                     className="w-10 h-10 object-cover rounded-full"
+                     alt="Item Image"/>
                     ) : (
-                      "No Image"
+                   "No Image"
                     )}
                   </td>
                   <td className="px-1 py-2 md:px-2 text-center">
