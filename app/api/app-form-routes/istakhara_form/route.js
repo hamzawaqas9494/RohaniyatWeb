@@ -31,7 +31,6 @@ export async function POST(req) {
         body.year
       }</p>
         <p><strong>Age:</strong> ${body.age || "N/A"}</p>
-       
         <p><strong>Gender:</strong> ${body.gender || "N/A"}</p>
         <p><strong>Status:</strong> ${body.status || "N/A"}</p>
         <p><strong>WhatsApp Number:</strong> ${body.whatsappNumber || "N/A"}</p>

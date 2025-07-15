@@ -3,17 +3,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Bold from "@tiptap/extension-bold";
-import Italic from "@tiptap/extension-italic";
-import Underline from "@tiptap/extension-underline";
-import Strike from "@tiptap/extension-strike";
 import TextAlign from "@tiptap/extension-text-align";
-import BulletList from "@tiptap/extension-bullet-list";
-import OrderedList from "@tiptap/extension-ordered-list";
-import ListItem from "@tiptap/extension-list-item";
 import Highlight from "@tiptap/extension-highlight";
-import Blockquote from "@tiptap/extension-blockquote";
-import CodeBlock from "@tiptap/extension-code-block";
 import Placeholder from "@tiptap/extension-placeholder";
 import { motion } from "framer-motion";
 import MainLayout from "../admin/components/ui/MainLayout";
@@ -45,7 +36,6 @@ export default function BlogForm() {
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [id, setId] = useState("");
-
   const editor = useEditor({
   extensions: [
   StarterKit,
@@ -54,7 +44,6 @@ export default function BlogForm() {
   Highlight,
   Placeholder.configure({ placeholder: "یہاں مواد لکھیں" }),
 ],
-
     content: "",
     onUpdate: ({ editor }) => setContent(editor.getHTML()),
     immediatelyRender: false,
@@ -64,7 +53,6 @@ export default function BlogForm() {
       action: "setParagraph",
       icon: <TbLetterP size={16} />,
     },
-
     { action: "toggleBold", icon: <BoldIcon size={16} /> },
     { action: "toggleItalic", icon: <ItalicIcon size={16} /> },
     { action: "toggleUnderline", icon: <UnderlineIcon size={16} /> },
@@ -82,7 +70,6 @@ export default function BlogForm() {
     { action: "redo", icon: <Redo2 size={16} /> },
     { action: "clearContent", icon: <Trash2 size={16} /> },
   ];
-
   const router = useRouter();
   // Check user login
   useEffect(() => {
@@ -91,15 +78,12 @@ export default function BlogForm() {
       router.push("/");
     }
   }, [router]);
-
   const handleAction = (editor, action, level = null) => {
     if (!editor) return;
-
     if (action === "clearContent") {
       editor.commands.clearContent();
       return;
     }
-
     if (action === "setHeading" && level) {
       editor.chain().focus().setHeading({ level }).run();
       return;
@@ -110,7 +94,6 @@ export default function BlogForm() {
     }
     editor.chain().focus()[action]().run();
   };
-
   const showMessage = (message) => {
     setModalMessage(message);
     setShowModal(true);
@@ -123,7 +106,6 @@ export default function BlogForm() {
     setTableName("");
     if (editor) editor.commands.clearContent();
   };
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const searchParams = new URLSearchParams(window.location.search);
@@ -133,7 +115,6 @@ export default function BlogForm() {
       setTableName(queryTable || "");
     }
   }, []);
-
   ///////////////////////////////////////////////////update data on the base of id////////////////////////////////
   useEffect(() => {
     const fetchData = async () => {
@@ -143,13 +124,11 @@ export default function BlogForm() {
           `/api/blog-data/get-table-data?id=${id}&tableName=${tableName}`
         );
         const data = await res.json();
-
         console.log(data.rows[0].title,"data")
         setTitle(data.rows[0].title || "");
         setContent(data.rows[0].content || "");
         setImage(data.rows[0].image || null);
         setTableName(tableName);
-
         // ✅ Only set content if editor exists and content is non-empty
         if (data.rows[0].content) {
           editor.commands.setContent(data.rows[0].content);
@@ -158,14 +137,11 @@ export default function BlogForm() {
         showMessage("❌ Failed to load blog data.");
       }
     };
-
     fetchData();
   }, [id, tableName, editor]);
-
-  /////////////////////////////////////send data to the database through editor////////////////////////////////////////
+  /////////////////////////////////send data to the database through editor////////////////////////////////////////
  const handleSubmit = async (e) => {
   e.preventDefault();
-
   if (!title || !content || !tableName) {
     const missing = [];
     if (!title) missing.push("Title");
@@ -174,16 +150,13 @@ export default function BlogForm() {
     showMessage(`⚠ Missing field(s): ${missing.join(", ")}`);
     return;
   }
-
   const formData = new FormData();
   formData.append("title", title);
   formData.append("content", content);
   formData.append("tableName", tableName);
   if (image) formData.append("image", image);
-
   try {
     let response;
-
     // ✅ If ID exists, it's an update (PUT)
     if (id) {
       formData.append("id", id);
@@ -198,12 +171,10 @@ export default function BlogForm() {
         body: formData,
       });
     }
-
     if (response.ok) {
       showMessage(`✅ Blog ${id ? "updated" : "posted"} successfully!`);
       clearForm();
       setId("");
-
       // Remove query params
       const newUrl = window.location.pathname;
       router.replace(newUrl, undefined, { shallow: true });
@@ -214,14 +185,11 @@ export default function BlogForm() {
     showMessage("❌ Something went wrong!");
   }
 };
-
-
   // eiditor
   const renderToolbar = (editor) => (
     <div className="flex gap-2 flex-wrap">
       {formatButtons.map(({ action, label, icon, level }) => {
         const key = level ? `${action}-${level}` : action;
-
         let isActive = false;
         const hasContent =
           editor
@@ -309,7 +277,6 @@ export default function BlogForm() {
             </svg>
           </div>
         </div>
-
         <div className="col-span-12 md:col-span-6">
           <input
             type="text"

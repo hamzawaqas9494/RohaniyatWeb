@@ -3,7 +3,6 @@ import MainLayout from "../admin/components/ui/MainLayout";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
 const allowedTables = [
   "taweez",
   "wazaif",
@@ -19,7 +18,6 @@ const allowedTables = [
   "alviamal",
   "saflitavezat",
 ];
-
 const tableNameMap = {
   taweez: "تعویذ",
   wazaif: "وظائف",
@@ -35,7 +33,6 @@ const tableNameMap = {
   alviamal: "علوی اعمال",
   saflitavezat: "سفلی تعویذات",
 };
-
 export default function Dashboard() {
   const [activeTable, setActiveTable] = useState("taweez");
   const [data, setData] = useState([]);
@@ -46,9 +43,7 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const limit = 5;
-
   const router = useRouter();
-
   // Check user login
   useEffect(() => {
     const loggedIn = localStorage.getItem("loggedIn");
@@ -56,12 +51,10 @@ export default function Dashboard() {
       router.push("/");
     }
   }, [router]);
-
   // Fetch data whenever active table or page changes
   useEffect(() => {
     fetchData();
   }, [activeTable, page]);
-
   // Fetch table data
   const fetchData = async () => {
     setLoading(true);
@@ -78,7 +71,6 @@ export default function Dashboard() {
       setLoading(false);
     }
   };
-
   // Handle delete confirmation
   const handleDeleteConfirm = async () => {
     if (!deleteId) return;
@@ -87,7 +79,6 @@ export default function Dashboard() {
         `/api/blog-data/delete-data?tableName=${activeTable}&id=${deleteId}`,
         { method: "DELETE" }
       );
-
       if (response.ok) {
         setDeleteStatus("Record Deleted Successfully.");
         fetchData();
@@ -101,32 +92,27 @@ export default function Dashboard() {
       console.error("Delete error:", error);
       setDeleteStatus("An error occurred while deleting.");
     }
-
     // Reset modal state
     setShowModal(false);
     setDeleteId(null);
     setTimeout(() => setDeleteStatus(null), 3000);
   };
-
   // Handle cancel button in modal
   const handleCancelDelete = () => {
     setShowModal(false);
     setDeleteId(null);
   };
-
   // Change selected table
   const handleTableChange = (table) => {
     setActiveTable(table);
     setPage(1);
   };
-
   // Navigate to specific page
   const goToPage = (num) => {
     if (num >= 1 && num <= totalPages) {
       setPage(num);
     }
   };
-
   return (
     <MainLayout>
       {/* Table selection UI */}
@@ -264,7 +250,6 @@ export default function Dashboard() {
           </tbody>
         </table>
       </div>
-
       {/* Pagination buttons */}
       <div className="flex justify-center items-center mt-4 space-x-2 font-urdu">
         <button
@@ -278,7 +263,6 @@ export default function Dashboard() {
         >
           Previous
         </button>
-
         {[...Array(totalPages)].map((_, idx) => {
           const pageNum = idx + 1;
           return (
@@ -295,7 +279,6 @@ export default function Dashboard() {
             </button>
           );
         })}
-
         <button
           onClick={() => goToPage(page + 1)}
           disabled={page === totalPages}
@@ -308,7 +291,6 @@ export default function Dashboard() {
           Next
         </button>
       </div>
-
       {/* Delete confirmation modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50  flex items-center justify-center z-50">
