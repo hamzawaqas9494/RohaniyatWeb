@@ -1,16 +1,15 @@
-// /** @type {import('next').NextConfig} */
-// const nextConfig = {
-//   // Completely remove turbo field
-//   experimental: {},
-// };
-
-// module.exports = nextConfig;
-   /** @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {},
 
   images: {
-    domains: ['gpvvxhhvxzefphknwtng.supabase.co']
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'gpvvxhhvxzefphknwtng.supabase.co',
+        pathname: '/storage/v1/object/public/**'   // Supabase storage ka path pattern
+      }
+    ]
   }
 };
 
