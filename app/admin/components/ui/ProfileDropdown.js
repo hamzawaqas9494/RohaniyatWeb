@@ -1,18 +1,14 @@
 "use client";
-
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
 export default function ProfileDropdown() {
   const router = useRouter();
-
   const handleSignOut = () => {
     localStorage.removeItem("loggedIn");
     router.push("/"); // Redirect to login
   };
-
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button className="rounded-full flex">
@@ -24,7 +20,6 @@ export default function ProfileDropdown() {
           alt="User"
         />
       </Menu.Button>
-
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"
@@ -47,7 +42,6 @@ export default function ProfileDropdown() {
               </a>
             )}
           </Menu.Item>
-
           <Menu.Item>
             {({ active }) => (
               <button

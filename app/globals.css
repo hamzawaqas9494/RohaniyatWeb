@@ -1,5 +1,4 @@
 @import "tailwindcss";
-
 @font-face {
   font-family: 'UrduFont';
   src: url('/assets/fonts/JameelNooriNastaleeqRegular.ttf') format('truetype');
@@ -10,14 +9,12 @@
   --background: #ffffff;
   --foreground: #171717;
 }
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -52,22 +49,18 @@ body {
   transition: transform 250ms ease-in-out;
   background: linear-gradient(to right, #5343ac, #81abce, #c0d3eb);
 }
-
 .nav-item button:hover:after {
   transform: scaleX(1);
 }
 .nav-item.active button:after {
   transform: scaleX(1);
 }
-
 .nav-item button.fromRight:after {
   transform-origin: 100% 50%;
 }
-
 .nav-item button.fromLeft:after {
   transform-origin: 0% 50%;
 }
-
 .tiptap {
   height: 40vh;
   padding: 5px;
@@ -80,7 +73,6 @@ body {
   font-weight: bold;
 }
 /* TipTap default styles for content formatting */
-
 .ProseMirror h1 {
   font-size: 2rem;
   font-weight: bold;
@@ -136,7 +128,6 @@ body {
   margin-left: 1.5rem !important;
   display: block !important;
 }
-
 .ProseMirror ul li,
 .ProseMirror ol li {
   display: list-item !important;
