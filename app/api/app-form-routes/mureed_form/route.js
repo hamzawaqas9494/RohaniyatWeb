@@ -6,7 +6,13 @@ export async function POST(req) {
     if (!body.name || !body.email) {
       return NextResponse.json(
         { error: "Name and Email are required!" },
-        { status: 400 }
+        { status: 400 , 
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          }, 
+        }
       );
     }
     const transporter = nodemailer.createTransport({
