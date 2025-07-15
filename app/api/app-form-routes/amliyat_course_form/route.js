@@ -1,14 +1,23 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
 export async function POST(req) {
   try {
     const body = await req.json();
+
     if (!body.name || !body.email) {
-      return NextResponse.json(
-        { error: "Name and Email are required!" },
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ error: "Name and Email are required!" }), {
+        status: 400,
+        headers: corsHeaders,
+      });
     }
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -16,6 +25,7 @@ export async function POST(req) {
         pass: process.env.EMAIL_PASS,
       },
     });
+
     const adminMailOptions = {
       from: `"New Request from ${body.name}" <${body.email}>`,
       to: "hamzawaqas194@gmail.com",
@@ -27,11 +37,8 @@ export async function POST(req) {
         <p><strong>Mother Name:</strong> ${body.motherName || "N/A"}</p>
         <p><strong>Country:</strong> ${body.country || "N/A"}</p>
         <p><strong>City:</strong> ${body.cityName || "N/A"}</p>
-           <p><strong>Date of Birth:</strong> ${body.day}-${body.month}-${
-        body.year
-      }</p>
+        <p><strong>Date of Birth:</strong> ${body.day}-${body.month}-${body.year}</p>
         <p><strong>Age:</strong> ${body.age || "N/A"}</p>
-       
         <p><strong>Gender:</strong> ${body.gender || "N/A"}</p>
         <p><strong>Status:</strong> ${body.status || "N/A"}</p>
         <p><strong>WhatsApp Number:</strong> ${body.whatsappNumber || "N/A"}</p>
@@ -41,6 +48,7 @@ export async function POST(req) {
         <p>Reply directly to this email to respond to the user.</p>
       `,
     };
+
     const userMailOptions = {
       from: `"Support Team" <${body.email}>`,
       to: body.email,
@@ -51,20 +59,34 @@ export async function POST(req) {
         <p>Regards,<br/>Support Team</p>
       `,
     };
+
     await transporter.sendMail(adminMailOptions);
     await transporter.sendMail(userMailOptions);
-    return NextResponse.json(
-      { message: "Email sent successfully to Admin & User" },
-      { status: 200 }
-    );
+
+    return new Response(JSON.stringify({ message: "Email sent successfully to Admin & User" }), {
+      status: 200,
+      headers: corsHeaders,
+    });
+
   } catch (error) {
     console.error("Server Error:", error);
-    return NextResponse.json(
-      { error: "Failed to send email", details: error.message },
-      { status: 500 }
-    );
+    return new Response(JSON.stringify({ error: "Failed to send email", details: error.message }), {
+      status: 500,
+      headers: corsHeaders,
+    });
   }
 }
+
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
+
 export async function GET() {
-  return NextResponse.json({ error: "Method Not Allowed" }, { status: 405 });
+  return new Response(JSON.stringify({ error: "Method Not Allowed" }), {
+    status: 405,
+    headers: corsHeaders,
+  });
 }
