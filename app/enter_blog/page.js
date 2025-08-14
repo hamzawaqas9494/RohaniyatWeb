@@ -122,7 +122,7 @@ export default function BlogForm() {
       if (!id || !tableName || !editor) return;
       try {
         const res = await fetch(
-          `/api/blog-data/get-table-data?id=${id}&tableName=${tableName}`
+          `/api/blog-data/get-data?id=${id}&tableName=${tableName}`
         );
         const data = await res.json();
         console.log(data.rows[0].title,"data")

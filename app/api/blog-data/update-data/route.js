@@ -1,47 +1,82 @@
-// // ////////////////////////////////////////////////// postgresql////////////////////////////////////////////////// 
-// // // import pool from "../../../../lib/db";
-// // // export const dynamic = "force-dynamic";
-// // // export async function GET(req) {
-// // //   try {
-// // //     const { searchParams } = new URL(req.url);
-// // //     const tableName = searchParams.get("tableName");
-// // //     const id = searchParams.get("id");
-// // //       const allowedTables = [
-// // //       "taweez", "wazaif", "qutb", "rohaniilaaj", "tawizatusmaniya",
-// // //       "rohanidokan", "nooriaamal", "noorialviaamal", "ooliaallahkaamal",
-// // //       "bamokalamal", "khasulkhasammal", "alviamal", "saflitavezat",
-// // //     ];
-// // //     if (!tableName || !allowedTables.includes(tableName)) {
-// // //       return new Response(JSON.stringify({ error: "Invalid table name" }), {
-// // //         status: 400,
-// // //         headers: { "Content-Type": "application/json" },
-// // //       });
-// // //     }
-// // //     if (!id) {
-// // //       return new Response(JSON.stringify({ error: "Missing ID" }), {
-// // //         status: 400,
-// // //         headers: { "Content-Type": "application/json" },
-// // //       });
-// // //     }
-// // //     const result = await pool.query(`SELECT * FROM ${tableName} WHERE id = $1`, [id]);
-// // //     if (result.rows.length === 0) {
-// // //       return new Response(JSON.stringify({ error: "Record not found" }), {
-// // //         status: 404,
-// // //         headers: { "Content-Type": "application/json" },
-// // //       });
-// // //     }
-// // //     return new Response(JSON.stringify(result.rows[0]), {
-// // //       status: 200,
-// // //       headers: { "Content-Type": "application/json" },
-// // //     });
-// // //   } catch (error) {
-// // //     console.error("Error fetching record:", error);
-// // //     return new Response(JSON.stringify({ error: "Internal Server Error" }), {
-// // //       status: 500,
-// // //       headers: { "Content-Type": "application/json" },
-// // //     });
-// // //   }
-// // // }
+//////////////////////////////////////////////// postgresql////////////////////////////////////////////////// 
+import pool from "../../../../lib/db";
+import fs from "fs";
+import path from "path";
+export const dynamic = "force-dynamic";
+
+export async function PUT(req) {
+  try {
+    const formData = await req.formData();
+    const id = formData.get("id");
+    const tableName = formData.get("tableName");
+    const title = formData.get("title");
+    const content = formData.get("content");
+    const image = formData.get("image");
+
+    if (!id || !tableName) {
+      return new Response(JSON.stringify({ error: "ID aur Table Name required hain" }), {
+        status: 400,
+      });
+    }
+
+    // ✅ Allowed table names
+    const allowedTables = [
+      "taweez", "wazaif", "qutb", "rohaniilaaj", "tawizatusmaniya",
+      "rohanidokan", "nooriaamal", "noorialviaamal", "ooliaallahkaamal",
+      "bamokalamal", "khasulkhasammal", "alviamal", "saflitavezat"
+    ];
+    if (!allowedTables.includes(tableName)) {
+      return new Response(JSON.stringify({ error: "Invalid table name" }), { status: 400 });
+    }
+
+    // ✅ Purani image ka naam DB se lo
+    const oldImageResult = await pool.query(
+      `SELECT image FROM ${tableName} WHERE id = $1`,
+      [id]
+    );
+    const oldImagePathFromDB = oldImageResult.rows[0]?.image; // e.g. "/uploads/abc.png"
+
+    let newImagePath = oldImagePathFromDB;
+
+    // ✅ Agar new image upload hui hai
+    if (image && image.name) {
+      const uploadDir = path.join(process.cwd(), "public", "uploads");
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+
+      // Purani image delete karo agar exist karti hai
+      if (oldImagePathFromDB) {
+        const fullOldPath = path.join(process.cwd(), "public", oldImagePathFromDB);
+        if (fs.existsSync(fullOldPath)) {
+          fs.unlinkSync(fullOldPath);
+        }
+      }
+
+      // New image save karo
+      const fileName = `${Date.now()}-${image.name}`;
+      const fullNewPath = path.join(uploadDir, fileName);
+      const buffer = Buffer.from(await image.arrayBuffer());
+      fs.writeFileSync(fullNewPath, buffer);
+
+      newImagePath = `/uploads/${fileName}`;
+    }
+
+    // ✅ DB update
+    await pool.query(
+      `UPDATE ${tableName} SET title = $1, content = $2, image = $3 WHERE id = $4`,
+      [title, content, newImagePath, id]
+    );
+
+    return new Response(JSON.stringify({ message: "Data updated successfully" }), { status: 200 });
+
+  } catch (error) {
+    console.error("Update Error:", error);
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
+  }
+}
+
+
 // // ////////////////////////////////////////////////// mysql////////////////////////////////////////////////// 
 
 // // import { writeFile, mkdir } from "fs/promises";
@@ -261,125 +296,125 @@
 // }
 
 
-import { supabase } from "../../../../lib/supabaseClient.js";
-import connectToDatabase from "../../../../lib/db";
+// import { supabase } from "../../../../lib/supabaseClient.js";
+// import connectToDatabase from "../../../../lib/db";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
-const allowedTables = [
-  "taweez", "wazaif", "qutb", "rohaniilaaj", "tawizatusmaniya",
-  "rohanidokan", "nooriaamal", "noorialviaamal", "ooliaallahkaamal",
-  "bamokalamal", "khasulkhasammal", "alviamal", "saflitavezat",
-];
+// const allowedTables = [
+//   "taweez", "wazaif", "qutb", "rohaniilaaj", "tawizatusmaniya",
+//   "rohanidokan", "nooriaamal", "noorialviaamal", "ooliaallahkaamal",
+//   "bamokalamal", "khasulkhasammal", "alviamal", "saflitavezat",
+// ];
 
-export async function PUT(req) {
-  try {
-    const formData = await req.formData();
-    const tableName = formData.get("tableName");
-    const id = formData.get("id");
-    const title = formData.get("title");
-    const content = formData.get("content");
-    const file = formData.get("image");
+// export async function PUT(req) {
+//   try {
+//     const formData = await req.formData();
+//     const tableName = formData.get("tableName");
+//     const id = formData.get("id");
+//     const title = formData.get("title");
+//     const content = formData.get("content");
+//     const file = formData.get("image");
 
-    if (!tableName || !allowedTables.includes(tableName)) {
-      return new Response(JSON.stringify({ error: "Invalid table name" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+//     if (!tableName || !allowedTables.includes(tableName)) {
+//       return new Response(JSON.stringify({ error: "Invalid table name" }), {
+//         status: 400,
+//         headers: { "Content-Type": "application/json" },
+//       });
+//     }
 
-    if (!id || isNaN(Number(id)) || !title || !content) {
-      return new Response(JSON.stringify({ error: "Missing or invalid fields" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+//     if (!id || isNaN(Number(id)) || !title || !content) {
+//       return new Response(JSON.stringify({ error: "Missing or invalid fields" }), {
+//         status: 400,
+//         headers: { "Content-Type": "application/json" },
+//       });
+//     }
 
-    const db = await connectToDatabase();
+//     const db = await connectToDatabase();
 
-    // 🔍 Get old image URL from DB
-    const [rows] = await db.query(`SELECT image FROM \`${tableName}\` WHERE id = ?`, [id]);
-    const oldImageUrl = rows[0]?.image;
+//     // 🔍 Get old image URL from DB
+//     const [rows] = await db.query(`SELECT image FROM \`${tableName}\` WHERE id = ?`, [id]);
+//     const oldImageUrl = rows[0]?.image;
 
-    let imagePath = null;
+//     let imagePath = null;
 
-    // ✅ Upload new image if provided
-    if (file && typeof file.name === "string") {
-      // 🔥 Delete old image if it exists
-      if (oldImageUrl) {
-        const encodedPath = oldImageUrl.split("/rohaniyatblogimage/")[1];
-        const publicPath = decodeURIComponent(encodedPath); // fixes %20 etc.
+//     // ✅ Upload new image if provided
+//     if (file && typeof file.name === "string") {
+//       // 🔥 Delete old image if it exists
+//       if (oldImageUrl) {
+//         const encodedPath = oldImageUrl.split("/rohaniyatblogimage/")[1];
+//         const publicPath = decodeURIComponent(encodedPath); // fixes %20 etc.
 
-        if (publicPath) {
-          const { error: removeError } = await supabase.storage
-            .from("rohaniyatblogimage")
-            .remove([publicPath]);
+//         if (publicPath) {
+//           const { error: removeError } = await supabase.storage
+//             .from("rohaniyatblogimage")
+//             .remove([publicPath]);
 
-          if (removeError) {
-            console.error("❌ Supabase delete error:", removeError.message);
-          } else {
-            console.log("✅ Old image deleted:", publicPath);
-          }
-        }
-      }
+//           if (removeError) {
+//             console.error("❌ Supabase delete error:", removeError.message);
+//           } else {
+//             console.log("✅ Old image deleted:", publicPath);
+//           }
+//         }
+//       }
 
-      // Upload new image
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const fileName = `${Date.now()}-${file.name}`;
+//       // Upload new image
+//       const bytes = await file.arrayBuffer();
+//       const buffer = Buffer.from(bytes);
+//       const fileName = `${Date.now()}-${file.name}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from("rohaniyatblogimage")
-        .upload(fileName, buffer, {
-          contentType: file.type,
-        });
+//       const { error: uploadError } = await supabase.storage
+//         .from("rohaniyatblogimage")
+//         .upload(fileName, buffer, {
+//           contentType: file.type,
+//         });
 
-      if (uploadError) {
-        console.error("❌ Upload error:", uploadError);
-        return new Response(JSON.stringify({ error: "Upload failed" }), {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        });
-      }
+//       if (uploadError) {
+//         console.error("❌ Upload error:", uploadError);
+//         return new Response(JSON.stringify({ error: "Upload failed" }), {
+//           status: 500,
+//           headers: { "Content-Type": "application/json" },
+//         });
+//       }
 
-      // ✅ Get public URL of new image
-      const { data: publicData } = supabase.storage
-        .from("rohaniyatblogimage")
-        .getPublicUrl(fileName);
+//       // ✅ Get public URL of new image
+//       const { data: publicData } = supabase.storage
+//         .from("rohaniyatblogimage")
+//         .getPublicUrl(fileName);
 
-      imagePath = publicData.publicUrl;
-    }
+//       imagePath = publicData.publicUrl;
+//     }
 
-    // ✅ Update MySQL record
-    const query = `
-      UPDATE \`${tableName}\`
-      SET title = ?, content = ?${imagePath ? ", image = ?" : ""}, updated_at = NOW()
-      WHERE id = ?
-    `;
+//     // ✅ Update MySQL record
+//     const query = `
+//       UPDATE \`${tableName}\`
+//       SET title = ?, content = ?${imagePath ? ", image = ?" : ""}, updated_at = NOW()
+//       WHERE id = ?
+//     `;
 
-    const queryParams = imagePath
-      ? [title, content, imagePath, id]
-      : [title, content, id];
+//     const queryParams = imagePath
+//       ? [title, content, imagePath, id]
+//       : [title, content, id];
 
-    const [result] = await db.query(query, queryParams);
+//     const [result] = await db.query(query, queryParams);
 
-    if (result.affectedRows === 0) {
-      return new Response(JSON.stringify({ error: "Blog not found" }), {
-        status: 404,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+//     if (result.affectedRows === 0) {
+//       return new Response(JSON.stringify({ error: "Blog not found" }), {
+//         status: 404,
+//         headers: { "Content-Type": "application/json" },
+//       });
+//     }
 
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+//     return new Response(JSON.stringify({ success: true }), {
+//       status: 200,
+//       headers: { "Content-Type": "application/json" },
+//     });
 
-  } catch (error) {
-    console.error("❌ PUT error:", error);
-    return new Response(JSON.stringify({ error: "Failed to update blog" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
-}
+//   } catch (error) {
+//     console.error("❌ PUT error:", error);
+//     return new Response(JSON.stringify({ error: "Failed to update blog" }), {
+//       status: 500,
+//       headers: { "Content-Type": "application/json" },
+//     });
+//   }
+// }

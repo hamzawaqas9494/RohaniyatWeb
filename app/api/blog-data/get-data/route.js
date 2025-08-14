@@ -1,13 +1,11 @@
-////////////////////////////////////////////////// posrtgresql ////////////////////////////////////////////////
+//////////////////////////////////////////////////// postgresql//////////////////////////////////////////////////// 
 import pool from "../../../../lib/db";
 export const dynamic = "force-dynamic";
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const tableName = searchParams.get("tableName");
-    const limit = parseInt(searchParams.get("limit")) || 5;
-    const page = parseInt(searchParams.get("page")) || 1;
-    const offset = (page - 1) * limit;
+    const id = searchParams.get("id"); // optional
     const allowedTables = [
       "taweez", "wazaif", "qutb", "rohaniilaaj", "tawizatusmaniya",
       "rohanidokan", "nooriaamal", "noorialviaamal", "ooliaallahkaamal",
@@ -18,21 +16,29 @@ export async function GET(req) {
         status: 400,
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*", // 👈 Allow all origins (for testing)
         },
       });
     }
-    const dataQuery = `SELECT * FROM ${tableName} ORDER BY id DESC LIMIT $1 OFFSET $2`;
-    const countQuery = `SELECT COUNT(*) FROM ${tableName}`;
-    const dataParams = [limit, offset];
-    const dataResult = await pool.query(dataQuery, dataParams);
-    const countResult = await pool.query(countQuery);
-    const totalCount = parseInt(countResult.rows[0].count);
+    let query;
+    let params = [];
+    if (id) {
+      query = `SELECT * FROM ${tableName} WHERE id = $1`;
+      params = [id];
+    } else {
+      query = `SELECT * FROM ${tableName} ORDER BY id DESC`;
+    }
+    const result = await pool.query(query, params);
     return new Response(
-      JSON.stringify({ rows: dataResult.rows, total: totalCount }),
+      JSON.stringify({
+        rows: result.rows,
+        total: result.rowCount,
+      }),
       {
         status: 200,
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*", // 👈 CORS header
         },
       }
     );
@@ -40,20 +46,21 @@ export async function GET(req) {
     console.error("Error fetching data:", error);
     return new Response(JSON.stringify({ error: "Internal Server Error" }), {
       status: 500,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*", // 👈 CORS header
+      },
     });
   }
 }
-////////////////////////////////////////////////// mysql ////////////////////////////////////////////////
+//////////////////////////////////////////////////// mysql//////////////////////////////////////////////////// 
 // import connectToDatabase from "../../../../lib/db";
 // export const dynamic = "force-dynamic";
 // export async function GET(req) {
 //   try {
 //     const { searchParams } = new URL(req.url);
 //     const tableName = searchParams.get("tableName");
-//     const limit = parseInt(searchParams.get("limit")) || 5;
-//     const page = parseInt(searchParams.get("page")) || 1;
-//     const offset = (page - 1) * limit;
+//     const id = searchParams.get("id"); // optional
 //     const allowedTables = [
 //       "taweez", "wazaif", "qutb", "rohaniilaaj", "tawizatusmaniya",
 //       "rohanidokan", "nooriaamal", "noorialviaamal", "ooliaallahkaamal",
@@ -64,21 +71,30 @@ export async function GET(req) {
 //         status: 400,
 //         headers: {
 //           "Content-Type": "application/json",
+//           "Access-Control-Allow-Origin": "*",
 //         },
 //       });
 //     }
 //     const db = await connectToDatabase();
-//     const dataQuery = `SELECT * FROM \`${tableName}\` ORDER BY id DESC LIMIT ? OFFSET ?`;
-//     const countQuery = `SELECT COUNT(*) AS count FROM \`${tableName}\``;
-//     const [dataRows] = await db.query(dataQuery, [limit, offset]);
-//     const [countRows] = await db.query(countQuery);
-//     const totalCount = parseInt(countRows[0].count);
+//     let query;
+//     let params = [];
+//     if (id) {
+//       query = `SELECT * FROM \`${tableName}\` WHERE id = ?`;
+//       params = [id];
+//     } else {
+//       query = `SELECT * FROM \`${tableName}\` ORDER BY id DESC`;
+//     }
+//     const [rows] = await db.query(query, params);
 //     return new Response(
-//       JSON.stringify({ rows: dataRows, total: totalCount }),
+//       JSON.stringify({
+//         rows,
+//         total: rows.length,
+//       }),
 //       {
 //         status: 200,
 //         headers: {
 //           "Content-Type": "application/json",
+//           "Access-Control-Allow-Origin": "*",
 //         },
 //       }
 //     );
@@ -86,8 +102,10 @@ export async function GET(req) {
 //     console.error("Error fetching data:", error);
 //     return new Response(JSON.stringify({ error: "Internal Server Error" }), {
 //       status: 500,
-//       headers: { "Content-Type": "application/json" },
+//       headers: {
+//         "Content-Type": "application/json",
+//         "Access-Control-Allow-Origin": "*",
+//       },
 //     });
 //   }
 // }
-
